@@ -15,24 +15,24 @@
 
         .card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .series-title { font-size: 1.1rem; font-weight: bold; color: #1d1d1f; border-bottom: 2px solid #007aff; padding-bottom: 5px; margin-bottom: 10px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }
-        .item-box { border: 1px solid #eee; border-radius: 8px; padding: 10px; text-align: center; background: #fafafa; }
-        .color-code { font-weight: bold; font-size: 1rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; }
+        .item-box { border: 1px solid #eee; border-radius: 8px; padding: 10px 5px; text-align: center; background: #fafafa; }
+        .color-code { font-weight: bold; font-size: 0.95rem; }
         .controls { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 5px; }
-        .btn-qty { width: 30px; height: 30px; border: none; background: #007aff; color: white; border-radius: 50%; font-size: 1.2rem; cursor: pointer; }
-        .qty { font-weight: bold; min-width: 20px; }
+        .btn-qty { width: 28px; height: 28px; border: none; background: #007aff; color: white; border-radius: 50%; font-size: 1.1rem; cursor: pointer; display: flex; justify-content: center; align-items: center; }
+        .qty { font-weight: bold; min-width: 18px; }
         
         .submit-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; z-index: 100; }
         .btn-submit { background: #34c759; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; }
         
         .lock-notice { background: #ff3b30; color: white; padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 15px; display: none; }
-        .input-field { width: 100%; padding: 8px; margin-top: 5px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc; }
+        .input-field { width: 100%; padding: 8px; margin-top: 5px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.95rem; }
         .history-item { border-bottom: 1px solid #eee; padding: 10px 0; }
     </style>
 </head>
 <body>
 
-    <h1>💇‍♂️ 設計師叫貨系統</h1>
+    <h1>💇‍♂️ 沙龍叫貨系統</h1>
 
     <div id="lock-banner" class="lock-notice">🔒 本月叫貨已截止（開放時間：每月 1~20 號）</div>
 
@@ -44,20 +44,20 @@
     <!-- 叫貨頁面 -->
     <div id="view-order">
         <div class="card">
-            <label><b>叫貨設計師：</b></label>
+            <label><b>叫貨設計師姓名：</b></label>
             <input type="text" id="designer-name" placeholder="請輸入姓名（必填）" class="input-field" onchange="loadHistory()">
         </div>
 
-        <!-- 自訂商品填寫區 -->
+        <!-- 自訂/特殊商品填寫區 -->
         <div class="card" style="border: 2px dashed #007aff;">
             <div class="series-title" style="border-bottom-color: #ff9500; color: #ff9500;">✏️ 特殊/自訂商品叫貨</div>
-            <label style="font-size: 0.9rem;">廠商名稱：</label>
+            <label style="font-size: 0.85rem;">廠商名稱：</label>
             <input type="text" id="custom-vendor" placeholder="例如：哥德式、資生堂" class="input-field">
             
-            <label style="font-size: 0.9rem;">商品名稱與規格：</label>
+            <label style="font-size: 0.85rem;">商品名稱與規格：</label>
             <input type="text" id="custom-name" placeholder="例如：MILBON 護髮素 200g" class="input-field">
             
-            <label style="font-size: 0.9rem;">數量：</label>
+            <label style="font-size: 0.85rem;">數量：</label>
             <input type="number" id="custom-qty" min="1" value="1" class="input-field" style="width: 80px;">
         </div>
 
@@ -65,7 +65,7 @@
 
         <div style="height: 80px;"></div>
         <div class="submit-bar">
-            <div>總數量: <span id="total-qty" style="color:#007aff; font-weight:bold;">0</span></div>
+            <div>總數量: <span id="total-qty" style="color:#007aff; font-weight:bold; font-size:1.2rem;">0</span></div>
             <button class="btn-submit" id="btn-submit-order" onclick="submitOrder()">送出叫貨單</button>
         </div>
     </div>
@@ -79,16 +79,56 @@
     </div>
 
     <script>
+        // 🔗 請將下方引號內替換成你的 Google Apps Script 部署 URL
+        const API_URL = "YOUR_GOOGLE_SCRIPT_URL";
+
         const products = [
-            { series: "Flole 綻放系列 ($188)", items: ["2NN", "3NN", "4NN", "5NN", "6NN", "7NN", "8NN", "10NN", "3MT", "4MT", "5MT", "6MT", "7MT", "8MT", "10MT", "12MT"] },
-            { series: "Flole 露西亞系列 ($188)", items: ["增量劑14", "牛奶白10", "星際灰7", "鐵木棕3", "曜石黑1", "極光灰14", "清水灰13", "清水灰11", "清水灰9", "清水灰7"] },
-            { series: "Flole 根本系列 ($188)", items: ["10MTB", "M9TB", "8MTB", "7MTB", "6MTB", "5MTB", "10CB", "9CB", "8CB", "7CB"] }
+            { 
+                series: "Flole 綻放系列 ($188)", 
+                items: [
+                    "2NN", "3NN", "4NN", "5NN", "6NN", "7NN", "8NN", "10NN",
+                    "3MT", "4MT", "5MT", "6MT", "7MT", "8MT", "10MT", "12MT",
+                    "3NB", "4NB", "5NB", "6NB", "7NB", "8NB", "10NB", "12NB",
+                    "5GR", "6GR", "7GR", "8GR", "10GR", "12GR",
+                    "5CB", "6CB", "7CB", "8CB", "10CB", "12CB",
+                    "5PA", "6PA", "7PA", "8PA", "10PA", "12PA",
+                    "5LV", "6LV", "7LV", "8LV", "10LV", "12LV",
+                    "5PI", "6PI", "7PI", "8PI", "10PI", "12PI",
+                    "CLEAR", "LIFT", "0-RED", "0-BLUE", "0-VIOLET", "0-YELLOW", "0-GREEN"
+                ] 
+            },
+            { 
+                series: "Flole 露西亞系列 ($188)", 
+                items: [
+                    "增量劑14", "牛奶白10", "星際灰7", "鐵木棕3", "曜石黑1",
+                    "極光灰14", "清水灰13", "清水灰11", "清水灰9", "清水灰7",
+                    "珍珠灰13", "珍珠灰11", "珍珠灰9", "珍珠灰7",
+                    "迷霧藍13", "迷霧藍11", "迷霧藍9", "迷霧藍7",
+                    "薄荷綠13", "薄荷綠11", "薄荷綠9", "薄荷綠7",
+                    "珊瑚粉13", "珊瑚粉11", "珊瑚粉9", "珊瑚粉7",
+                    "薰衣草13", "薰衣草11", "薰衣草9", "薰衣草7",
+                    "蜜桃桔13", "蜜桃桔11", "蜜桃桔9", "蜜桃桔7"
+                ] 
+            },
+            { 
+                series: "Flole 根本系列 ($188)", 
+                items: [
+                    "10MTB", "M9TB", "8MTB", "7MTB", "6MTB", "5MTB",
+                    "10CB", "9CB", "8CB", "7CB", "6CB", "5CB",
+                    "10NGB", "9NGB", "8NGB", "7NGB", "6NGB", "5NGB",
+                    "10BEB", "9BEB", "8BEB", "7BEB", "6BEB", "5BEB",
+                    "10MGB", "9MGB", "8MGB", "7MGB", "6MGB", "5MGB"
+                ] 
+            },
+            {
+                series: "Flole 雙氧水 ($200)",
+                items: ["3%", "6%", "9%", "12%"]
+            }
         ];
 
         let cart = {};
         let isLocked = false;
 
-        // 檢查日期權限（20號截止）
         function checkDateLimit() {
             const today = new Date();
             const day = today.getDate();
@@ -138,7 +178,7 @@
             document.getElementById('total-qty').innerText = totalCart;
         }
 
-        function submitOrder() {
+        async function submitOrder() {
             if(isLocked) { alert('每月 20 號後截止叫貨！'); return; }
 
             const name = document.getElementById('designer-name').value.trim();
@@ -149,7 +189,6 @@
                 return { vendor: 'Flole', name: `${series} - ${code}`, qty: qty };
             });
 
-            // 處理自訂商品
             const cVendor = document.getElementById('custom-vendor').value.trim();
             const cName = document.getElementById('custom-name').value.trim();
             const cQty = parseInt(document.getElementById('custom-qty').value) || 0;
@@ -160,24 +199,47 @@
 
             if (orderItems.length === 0) { alert('請至少選擇或填寫一樣商品！'); return; }
 
-            let allOrders = JSON.parse(localStorage.getItem('salon_orders') || '[]');
-            const newOrder = { 
-                designer: name, 
-                items: orderItems, 
-                date: new Date().toLocaleDateString(),
-                time: new Date().toLocaleTimeString() 
-            };
-            allOrders.push(newOrder);
-            localStorage.setItem('salon_orders', JSON.stringify(allOrders));
+            const submitBtn = document.getElementById('btn-submit-order');
+            submitBtn.disabled = true;
+            submitBtn.innerText = '傳送中...';
 
-            alert('叫貨成功！已成功傳送。');
-            cart = {};
-            document.getElementById('custom-vendor').value = '';
-            document.getElementById('custom-name').value = '';
-            document.getElementById('custom-qty').value = '1';
-            renderProducts();
-            document.getElementById('total-qty').innerText = '0';
-            loadHistory();
+            const payload = { designer: name, items: orderItems };
+
+            try {
+                if (API_URL !== "YOUR_GOOGLE_SCRIPT_URL") {
+                    await fetch(API_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                }
+                
+                // 本地同步備份
+                let allOrders = JSON.parse(localStorage.getItem('salon_orders') || '[]');
+                const now = new Date();
+                allOrders.push({
+                    designer: name,
+                    items: orderItems,
+                    date: `${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()}`,
+                    time: now.toLocaleTimeString()
+                });
+                localStorage.setItem('salon_orders', JSON.stringify(allOrders));
+
+                alert('叫貨成功！叫貨單已成功送出。');
+                cart = {};
+                document.getElementById('custom-vendor').value = '';
+                document.getElementById('custom-name').value = '';
+                document.getElementById('custom-qty').value = '1';
+                renderProducts();
+                document.getElementById('total-qty').innerText = '0';
+                loadHistory();
+            } catch (err) {
+                alert('傳送失敗，請檢查網路連線。');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = '送出叫貨單';
+            }
         }
 
         function switchView(view) {
@@ -195,29 +257,58 @@
             }
         }
 
-        function loadHistory() {
+        async function loadHistory() {
             const name = document.getElementById('designer-name').value.trim();
             const container = document.getElementById('history-container');
             if(!name) { container.innerHTML = '請輸入姓名以查詢個人紀錄。'; return; }
 
-            let allOrders = JSON.parse(localStorage.getItem('salon_orders') || '[]');
-            let myOrders = allOrders.filter(o => o.designer === name);
+            container.innerHTML = '載入紀錄中...';
 
-            if(myOrders.length === 0) {
-                container.innerHTML = `查無 <b>${name}</b> 的歷史叫貨紀錄。`;
-                return;
-            }
+            try {
+                let myOrders = [];
+                if (API_URL !== "YOUR_GOOGLE_SCRIPT_URL") {
+                    const res = await fetch(API_URL);
+                    const rows = await res.json();
+                    
+                    const userRows = rows.slice(1).filter(r => r[1] === name);
+                    
+                    let grouped = {};
+                    userRows.forEach(r => {
+                        const timeKey = r[0];
+                        if (!grouped[timeKey]) grouped[timeKey] = [];
+                        grouped[timeKey].push({ vendor: r[2], name: r[3], qty: r[4] });
+                    });
 
-            let html = '';
-            myOrders.reverse().forEach(o => {
-                html += `<div class="history-item">
-                    <div style="font-weight:bold; color:#007aff;">📅 ${o.date} ${o.time}</div>`;
-                o.items.forEach(i => {
-                    html += `<div style="font-size:0.9rem; margin-top:3px;">• [${i.vendor}] ${i.name} x ${i.qty}</div>`;
+                    myOrders = Object.entries(grouped).map(([time, items]) => ({
+                        dateStr: time,
+                        items: items
+                    }));
+                } else {
+                    let allOrders = JSON.parse(localStorage.getItem('salon_orders') || '[]');
+                    myOrders = allOrders.filter(o => o.designer === name).map(o => ({
+                        dateStr: `${o.date} ${o.time}`,
+                        items: o.items
+                    }));
+                }
+
+                if(myOrders.length === 0) {
+                    container.innerHTML = `查無 <b>${name}</b> 的歷史叫貨紀錄。`;
+                    return;
+                }
+
+                let html = '';
+                myOrders.reverse().forEach(o => {
+                    html += `<div class="history-item">
+                        <div style="font-weight:bold; color:#007aff;">📅 ${o.dateStr}</div>`;
+                    o.items.forEach(i => {
+                        html += `<div style="font-size:0.9rem; margin-top:3px;">• [${i.vendor}] ${i.name} x ${i.qty}</div>`;
+                    });
+                    html += `</div>`;
                 });
-                html += `</div>`;
-            });
-            container.innerHTML = html;
+                container.innerHTML = html;
+            } catch (e) {
+                container.innerHTML = '無法載入歷史紀錄。';
+            }
         }
 
         checkDateLimit();
