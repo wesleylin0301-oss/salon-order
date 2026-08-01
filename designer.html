@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>沙龍叫貨系統 - 設計師端</title>
+    <style>
+        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { margin: 0; padding: 15px; background: #f5f5f7; color: #333; }
+        h1 { text-align: center; color: #2c3e50; font-size: 1.4rem; margin-bottom: 10px; }
+        
+        .sub-nav { display: flex; gap: 10px; margin-bottom: 15px; }
+        .nav-btn { flex: 1; padding: 10px; border: none; background: #e0e0e0; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .nav-btn.active { background: #007aff; color: white; }
+
+        .card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .series-title { font-size: 1.1rem; font-weight: bold; color: #1d1d1f; border-bottom: 2px solid #007aff; padding-bottom: 5px; margin-bottom: 10px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }
+        .item-box { border: 1px solid #eee; border-radius: 8px; padding: 10px; text-align: center; background: #fafafa; }
+        .color-code { font-weight: bold; font-size: 1rem; }
+        .controls { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 5px; }
+        .btn-qty { width: 30px; height: 30px; border: none; background: #007aff; color: white; border-radius: 50%; font-size: 1.2rem; cursor: pointer; }
+        .qty { font-weight: bold; min-width: 20px; }
+        
+        .submit-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+        .btn-submit { background: #34c759; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; }
+        
+        .lock-notice { background: #ff3b30; color: white; padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 15px; display: none; }
+        .input-field { width: 100%; padding: 8px; margin-top: 5px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc; }
+        .history-item { border-bottom: 1px solid #eee; padding: 10px 0; }
+    </style>
+</head>
+<body>
+
+    <h1>💇‍♂️ 設計師叫貨系統</h1>
+
+    <div id="lock-banner" class="lock-notice">🔒 本月叫貨已截止（開放時間：每月 1~20 號）</div>
+
+    <div class="sub-nav">
+        <button class="nav-btn active" id="btn-order-view" onclick="switchView('order')">📝 我要叫貨</button>
+        <button class="nav-btn" id="btn-history-view" onclick="switchView('history')">📜 我的叫貨紀錄</button>
+    </div>
+
+    <!-- 叫貨頁面 -->
+    <div id="view-order">
+        <div class="card">
+            <label><b>叫貨設計師：</b></label>
+            <input type="text" id="designer-name" placeholder="請輸入姓名（必填）" class="input-field" onchange="loadHistory()">
+        </div>
+
+        <!-- 自訂商品填寫區 -->
+        <div class="card" style="border: 2px dashed #007aff;">
+            <div class="series-title" style="border-bottom-color: #ff9500; color: #ff9500;">✏️ 特殊/自訂商品叫貨</div>
+            <label style="font-size: 0.9rem;">廠商名稱：</label>
+            <input type="text" id="custom-vendor" placeholder="例如：哥德式、資生堂" class="input-field">
+            
+            <label style="font-size: 0.9rem;">商品名稱與規格：</label>
+            <input type="text" id="custom-name" placeholder="例如：MILBON 護髮素 200g" class="input-field">
+            
+            <label style="font-size: 0.9rem;">數量：</label>
+            <input type="number" id="custom-qty" min="1" value="1" class="input-field" style="width: 80px;">
+        </div>
+
+        <div id="product-container"></div>
+
+        <div style="height: 80px;"></div>
+        <div class="submit-bar">
+            <div>總數量: <span id="total-qty" style="color:#007aff; font-weight:bold;">0</span></div>
+            <button class="btn-submit" id="btn-submit-order" onclick="submitOrder()">送出叫貨單</button>
+        </div>
+    </div>
+
+    <!-- 歷史紀錄頁面 -->
+    <div id="view-history" style="display: none;">
+        <div class="card">
+            <h3>📜 叫貨歷史紀錄</h3>
+            <div id="history-container">請先輸入設計師姓名以查詢紀錄。</div>
+        </div>
+    </div>
+
+    <script>
+        const products = [
+            { series: "Flole 綻放系列 ($188)", items: ["2NN", "3NN", "4NN", "5NN", "6NN", "7NN", "8NN", "10NN", "3MT", "4MT", "5MT", "6MT", "7MT", "8MT", "10MT", "12MT"] },
+            { series: "Flole 露西亞系列 ($188)", items: ["增量劑14", "牛奶白10", "星際灰7", "鐵木棕3", "曜石黑1", "極光灰14", "清水灰13", "清水灰11", "清水灰9", "清水灰7"] },
+            { series: "Flole 根本系列 ($188)", items: ["10MTB", "M9TB", "8MTB", "7MTB", "6MTB", "5MTB", "10CB", "9CB", "8CB", "7CB"] }
+        ];
+
+        let cart = {};
+        let isLocked = false;
+
+        // 檢查日期權限（20號截止）
+        function checkDateLimit() {
+            const today = new Date();
+            const day = today.getDate();
+            if (day > 20) {
+                isLocked = true;
+                document.getElementById('lock-banner').style.display = 'block';
+                document.getElementById('btn-submit-order').disabled = true;
+                document.getElementById('btn-submit-order').style.background = '#ccc';
+                document.getElementById('btn-submit-order').innerText = '叫貨已截止';
+            }
+        }
+
+        function renderProducts() {
+            const container = document.getElementById('product-container');
+            container.innerHTML = '';
+            products.forEach(group => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                let html = `<div class="series-title">${group.series}</div><div class="grid">`;
+                group.items.forEach(code => {
+                    const id = `${group.series}_${code}`;
+                    const qty = cart[id] || 0;
+                    html += `
+                        <div class="item-box">
+                            <div class="color-code">${code}</div>
+                            <div class="controls">
+                                <button class="btn-qty" onclick="updateQty('${id}', -1)" ${isLocked ? 'disabled' : ''}>-</button>
+                                <span class="qty" id="qty-${id}">${qty}</span>
+                                <button class="btn-qty" onclick="updateQty('${id}', 1)" ${isLocked ? 'disabled' : ''}>+</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+                card.innerHTML = html;
+                container.appendChild(card);
+            });
+        }
+
+        function updateQty(id, change) {
+            if(isLocked) return;
+            cart[id] = (cart[id] || 0) + change;
+            if (cart[id] < 0) cart[id] = 0;
+            document.getElementById(`qty-${id}`).innerText = cart[id];
+            
+            const totalCart = Object.values(cart).reduce((a, b) => a + b, 0);
+            document.getElementById('total-qty').innerText = totalCart;
+        }
+
+        function submitOrder() {
+            if(isLocked) { alert('每月 20 號後截止叫貨！'); return; }
+
+            const name = document.getElementById('designer-name').value.trim();
+            if (!name) { alert('請先填寫設計師姓名！'); return; }
+
+            let orderItems = Object.entries(cart).filter(([_, qty]) => qty > 0).map(([id, qty]) => {
+                const [series, code] = id.split('_');
+                return { vendor: 'Flole', name: `${series} - ${code}`, qty: qty };
+            });
+
+            // 處理自訂商品
+            const cVendor = document.getElementById('custom-vendor').value.trim();
+            const cName = document.getElementById('custom-name').value.trim();
+            const cQty = parseInt(document.getElementById('custom-qty').value) || 0;
+
+            if (cVendor && cName && cQty > 0) {
+                orderItems.push({ vendor: cVendor, name: `[自訂] ${cName}`, qty: cQty });
+            }
+
+            if (orderItems.length === 0) { alert('請至少選擇或填寫一樣商品！'); return; }
+
+            let allOrders = JSON.parse(localStorage.getItem('salon_orders') || '[]');
+            const newOrder = { 
+                designer: name, 
+                items: orderItems, 
+                date: new Date().toLocaleDateString(),
+                time: new Date().toLocaleTimeString() 
+            };
+            allOrders.push(newOrder);
+            localStorage.setItem('salon_orders', JSON.stringify(allOrders));
+
+            alert('叫貨成功！已成功傳送。');
+            cart = {};
+            document.getElementById('custom-vendor').value = '';
+            document.getElementById('custom-name').value = '';
+            document.getElementById('custom-qty').value = '1';
+            renderProducts();
+            document.getElementById('total-qty').innerText = '0';
+            loadHistory();
+        }
+
+        function switchView(view) {
+            if(view === 'order') {
+                document.getElementById('view-order').style.display = 'block';
+                document.getElementById('view-history').style.display = 'none';
+                document.getElementById('btn-order-view').classList.add('active');
+                document.getElementById('btn-history-view').classList.remove('active');
+            } else {
+                document.getElementById('view-order').style.display = 'none';
+                document.getElementById('view-history').style.display = 'block';
+                document.getElementById('btn-order-view').classList.remove('active');
+                document.getElementById('btn-history-view').classList.add('active');
+                loadHistory();
+            }
+        }
+
+        function loadHistory() {
+            const name = document.getElementById('designer-name').value.trim();
+            const container = document.getElementById('history-container');
+            if(!name) { container.innerHTML = '請輸入姓名以查詢個人紀錄。'; return; }
+
+            let allOrders = JSON.parse(localStorage.getItem('salon_orders') || '[]');
+            let myOrders = allOrders.filter(o => o.designer === name);
+
+            if(myOrders.length === 0) {
+                container.innerHTML = `查無 <b>${name}</b> 的歷史叫貨紀錄。`;
+                return;
+            }
+
+            let html = '';
+            myOrders.reverse().forEach(o => {
+                html += `<div class="history-item">
+                    <div style="font-weight:bold; color:#007aff;">📅 ${o.date} ${o.time}</div>`;
+                o.items.forEach(i => {
+                    html += `<div style="font-size:0.9rem; margin-top:3px;">• [${i.vendor}] ${i.name} x ${i.qty}</div>`;
+                });
+                html += `</div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        checkDateLimit();
+        renderProducts();
+    </script>
+</body>
+</html>
