@@ -79,8 +79,7 @@
     </div>
 
     <script>
-        // 🔗 請將下方引號內替換成你的 Google Apps Script 部署 URL
-        const API_URL = "YOUR_GOOGLE_SCRIPT_URL";
+        const API_URL = "https://script.google.com/macros/s/AKfycbxTO4MHR49JFCVxk3p_8vWkb8RyMAgxnR2pSYw8Ka4yuYWTABZ0rmCDLXzm4ZUSSDv5/exec";
 
         const products = [
             { 
@@ -206,16 +205,13 @@
             const payload = { designer: name, items: orderItems };
 
             try {
-                if (API_URL !== "YOUR_GOOGLE_SCRIPT_URL") {
-                    await fetch(API_URL, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                }
+                await fetch(API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
                 
-                // 本地同步備份
                 let allOrders = JSON.parse(localStorage.getItem('salon_orders') || '[]');
                 const now = new Date();
                 allOrders.push({
@@ -226,7 +222,7 @@
                 });
                 localStorage.setItem('salon_orders', JSON.stringify(allOrders));
 
-                alert('叫貨成功！叫貨單已成功送出。');
+                alert('叫貨成功！叫貨單已成功送出至雲端。');
                 cart = {};
                 document.getElementById('custom-vendor').value = '';
                 document.getElementById('custom-name').value = '';
@@ -265,31 +261,22 @@
             container.innerHTML = '載入紀錄中...';
 
             try {
-                let myOrders = [];
-                if (API_URL !== "YOUR_GOOGLE_SCRIPT_URL") {
-                    const res = await fetch(API_URL);
-                    const rows = await res.json();
-                    
-                    const userRows = rows.slice(1).filter(r => r[1] === name);
-                    
-                    let grouped = {};
-                    userRows.forEach(r => {
-                        const timeKey = r[0];
-                        if (!grouped[timeKey]) grouped[timeKey] = [];
-                        grouped[timeKey].push({ vendor: r[2], name: r[3], qty: r[4] });
-                    });
+                const res = await fetch(API_URL);
+                const rows = await res.json();
+                
+                const userRows = rows.slice(1).filter(r => r[1] === name);
+                
+                let grouped = {};
+                userRows.forEach(r => {
+                    const timeKey = r[0];
+                    if (!grouped[timeKey]) grouped[timeKey] = [];
+                    grouped[timeKey].push({ vendor: r[2], name: r[3], qty: r[4] });
+                });
 
-                    myOrders = Object.entries(grouped).map(([time, items]) => ({
-                        dateStr: time,
-                        items: items
-                    }));
-                } else {
-                    let allOrders = JSON.parse(localStorage.getItem('salon_orders') || '[]');
-                    myOrders = allOrders.filter(o => o.designer === name).map(o => ({
-                        dateStr: `${o.date} ${o.time}`,
-                        items: o.items
-                    }));
-                }
+                let myOrders = Object.entries(grouped).map(([time, items]) => ({
+                    dateStr: time,
+                    items: items
+                }));
 
                 if(myOrders.length === 0) {
                     container.innerHTML = `查無 <b>${name}</b> 的歷史叫貨紀錄。`;
