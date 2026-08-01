@@ -27,57 +27,37 @@
     </div>
 
     <script>
-        // 🔗 請將下方引號內替換成相同的 Google Apps Script 部署 URL
-        const API_URL = "YOUR_GOOGLE_SCRIPT_URL";
+        const API_URL = "https://script.google.com/macros/s/AKfycbxTO4MHR49JFCVxk3p_8vWkb8RyMAgxnR2pSYw8Ka4yuYWTABZ0rmCDLXzm4ZUSSDv5/exec";
 
         async function updateSummary() {
-            document.getElementById('summary-text').value = "正在讀取最新叫貨紀錄，請稍候...";
+            document.getElementById('summary-text').value = "正在讀取雲端最新叫貨紀錄，請稍候...";
             
             try {
                 let detailLog = "【各設計師叫貨明細（含日期時間）】\n";
                 let vendorSummary = {};
 
-                if (API_URL !== "YOUR_GOOGLE_SCRIPT_URL") {
-                    const res = await fetch(API_URL);
-                    const rows = await res.json();
-                    
-                    if (rows.length <= 1) {
-                        document.getElementById('summary-text').value = "目前尚無任何叫貨紀錄。";
-                        return;
-                    }
-
-                    const dataRows = rows.slice(1);
-                    
-                    dataRows.forEach(r => {
-                        const timeStr = r[0];
-                        const designer = r[1];
-                        const vendor = r[2];
-                        const pName = r[3];
-                        const qty = parseInt(r[4]) || 0;
-
-                        detailLog += `📅 ${timeStr} - 👤 ${designer}: [${vendor}] ${pName} x ${qty}\n`;
-
-                        if (!vendorSummary[vendor]) vendorSummary[vendor] = {};
-                        vendorSummary[vendor][pName] = (vendorSummary[vendor][pName] || 0) + qty;
-                    });
-
-                } else {
-                    let allOrders = JSON.parse(localStorage.getItem('salon_orders') || '[]');
-                    if (allOrders.length === 0) {
-                        document.getElementById('summary-text').value = "目前尚無任何設計師送出叫貨單。";
-                        return;
-                    }
-
-                    allOrders.forEach(order => {
-                        const orderDate = order.date || new Date().toLocaleDateString();
-                        detailLog += `\n📅 ${orderDate} ${order.time} - 👤 ${order.designer}:\n`;
-                        order.items.forEach(item => {
-                            detailLog += `  - [${item.vendor}] ${item.name} x ${item.qty}\n`;
-                            if (!vendorSummary[item.vendor]) vendorSummary[item.vendor] = {};
-                            vendorSummary[item.vendor][item.name] = (vendorSummary[item.vendor][item.name] || 0) + item.qty;
-                        });
-                    });
+                const res = await fetch(API_URL);
+                const rows = await res.json();
+                
+                if (!rows || rows.length <= 1) {
+                    document.getElementById('summary-text').value = "目前雲端尚無任何叫貨紀錄。";
+                    return;
                 }
+
+                const dataRows = rows.slice(1);
+                
+                dataRows.forEach(r => {
+                    const timeStr = r[0];
+                    const designer = r[1];
+                    const vendor = r[2];
+                    const pName = r[3];
+                    const qty = parseInt(r[4]) || 0;
+
+                    detailLog += `📅 ${timeStr} - 👤 ${designer}: [${vendor}] ${pName} x ${qty}\n`;
+
+                    if (!vendorSummary[vendor]) vendorSummary[vendor] = {};
+                    vendorSummary[vendor][pName] = (vendorSummary[vendor][pName] || 0) + qty;
+                });
 
                 let vendorMessage = "\n===================\n【各廠商叫貨統計總清單】\n";
                 Object.entries(vendorSummary).forEach(([vendor, items]) => {
