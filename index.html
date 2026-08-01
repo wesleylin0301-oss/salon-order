@@ -79,7 +79,8 @@
     </div>
 
     <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbxTO4MHR49JFCVxk3p_8vWkb8RyMAgxnR2pSYw8Ka4yuYWTABZ0rmCDLXzm4ZUSSDv5/exec";
+        // ⚠️ 請把引號內改為你步驟2取得的新網址
+        const API_URL = "YOUR_NEW_GOOGLE_URL";
 
         const products = [
             { 
@@ -205,24 +206,14 @@
             const payload = { designer: name, items: orderItems };
 
             try {
+                // 使用 text/plain 繞過 CORS 阻擋
                 await fetch(API_URL, {
                     method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify(payload)
                 });
-                
-                let allOrders = JSON.parse(localStorage.getItem('salon_orders') || '[]');
-                const now = new Date();
-                allOrders.push({
-                    designer: name,
-                    items: orderItems,
-                    date: `${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()}`,
-                    time: now.toLocaleTimeString()
-                });
-                localStorage.setItem('salon_orders', JSON.stringify(allOrders));
 
-                alert('叫貨成功！叫貨單已成功送出至雲端。');
+                alert('叫貨成功！叫貨單已送出。');
                 cart = {};
                 document.getElementById('custom-vendor').value = '';
                 document.getElementById('custom-name').value = '';
@@ -231,7 +222,7 @@
                 document.getElementById('total-qty').innerText = '0';
                 loadHistory();
             } catch (err) {
-                alert('傳送失敗，請檢查網路連線。');
+                alert('傳送失敗，請檢查網路或 Google 部署設定。');
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerText = '送出叫貨單';
