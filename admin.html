@@ -9,58 +9,92 @@
         body { margin: 0; padding: 15px; background: #f5f5f7; color: #333; }
         h1 { text-align: center; color: #2c3e50; font-size: 1.4rem; margin-bottom: 15px; }
         .card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        textarea { width: 100%; height: 350px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: monospace; font-size: 0.9rem; }
-        .btn-copy { width: 100%; background: #007aff; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; }
+        textarea { width: 100%; height: 420px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: monospace; font-size: 0.9rem; line-height: 1.4; }
+        .btn-copy { width: 100%; background: #007aff; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; font-size: 1rem; }
         .btn-refresh { width: 100%; background: #34c759; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; }
         .btn-clear { width: 100%; background: #ff3b30; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <h1>🔒 店長專用 - 廠商叫貨總統計</h1>
+    <h1>🔒 店長專用 - 叫貨總統計</h1>
 
     <div class="card">
-        <textarea id="summary-text" readonly placeholder="載入中..."></textarea>
-        <button class="btn-refresh" onclick="updateSummary()">🔄 重新整理叫貨數據</button>
+        <textarea id="summary-text" readonly placeholder="資料同步載入中..."></textarea>
+        <button class="btn-refresh" onclick="updateSummary()">🔄 重新整理雲端叫貨數據</button>
         <button class="btn-copy" onclick="copySummary()">📋 一鍵複製總表（傳給廠商業務）</button>
-        <button class="btn-clear" onclick="clearOrders()">🗑️ 清空歷史叫貨紀錄</button>
+        <button class="btn-clear" onclick="clearOrders()">🗑️ 清空歷史紀錄（僅清空本機）</button>
     </div>
 
     <script>
-        function updateSummary() {
-            let allOrders = JSON.parse(localStorage.getItem('salon_orders') || '[]');
-            if (allOrders.length === 0) {
-                document.getElementById('summary-text').value = "目前尚無任何設計師送出叫貨單。";
-                return;
-            }
+        // 🔗 請將下方引號內替換成相同的 Google Apps Script 部署 URL
+        const API_URL = "YOUR_GOOGLE_SCRIPT_URL";
 
-            let vendorSummary = {};
-            let detailLog = "【各設計師叫貨明細】\n";
+        async function updateSummary() {
+            document.getElementById('summary-text').value = "正在讀取最新叫貨紀錄，請稍候...";
+            
+            try {
+                let detailLog = "【各設計師叫貨明細（含日期時間）】\n";
+                let vendorSummary = {};
 
-            allOrders.forEach(order => {
-                detailLog += `\n👤 ${order.designer} (${order.date} ${order.time}):\n`;
-                order.items.forEach(item => {
-                    detailLog += `  - [${item.vendor}] ${item.name} x ${item.qty}\n`;
+                if (API_URL !== "YOUR_GOOGLE_SCRIPT_URL") {
+                    const res = await fetch(API_URL);
+                    const rows = await res.json();
                     
-                    // 依廠商分類統計
-                    if (!vendorSummary[item.vendor]) vendorSummary[item.vendor] = {};
-                    vendorSummary[item.vendor][item.name] = (vendorSummary[item.vendor][item.name] || 0) + item.qty;
+                    if (rows.length <= 1) {
+                        document.getElementById('summary-text').value = "目前尚無任何叫貨紀錄。";
+                        return;
+                    }
+
+                    const dataRows = rows.slice(1);
+                    
+                    dataRows.forEach(r => {
+                        const timeStr = r[0];
+                        const designer = r[1];
+                        const vendor = r[2];
+                        const pName = r[3];
+                        const qty = parseInt(r[4]) || 0;
+
+                        detailLog += `📅 ${timeStr} - 👤 ${designer}: [${vendor}] ${pName} x ${qty}\n`;
+
+                        if (!vendorSummary[vendor]) vendorSummary[vendor] = {};
+                        vendorSummary[vendor][pName] = (vendorSummary[vendor][pName] || 0) + qty;
+                    });
+
+                } else {
+                    let allOrders = JSON.parse(localStorage.getItem('salon_orders') || '[]');
+                    if (allOrders.length === 0) {
+                        document.getElementById('summary-text').value = "目前尚無任何設計師送出叫貨單。";
+                        return;
+                    }
+
+                    allOrders.forEach(order => {
+                        const orderDate = order.date || new Date().toLocaleDateString();
+                        detailLog += `\n📅 ${orderDate} ${order.time} - 👤 ${order.designer}:\n`;
+                        order.items.forEach(item => {
+                            detailLog += `  - [${item.vendor}] ${item.name} x ${item.qty}\n`;
+                            if (!vendorSummary[item.vendor]) vendorSummary[item.vendor] = {};
+                            vendorSummary[item.vendor][item.name] = (vendorSummary[item.vendor][item.name] || 0) + item.qty;
+                        });
+                    });
+                }
+
+                let vendorMessage = "\n===================\n【各廠商叫貨統計總清單】\n";
+                Object.entries(vendorSummary).forEach(([vendor, items]) => {
+                    vendorMessage += `\n🏢 廠商：${vendor}\n-------------------\n`;
+                    let vTotal = 0;
+                    Object.entries(items).forEach(([pName, qty]) => {
+                        vendorMessage += `${pName} : ${qty}\n`;
+                        vTotal += qty;
+                    });
+                    vendorMessage += `小計：${vTotal}\n`;
                 });
-            });
 
-            let vendorMessage = "\n===================\n【各廠商叫貨統計總清單】\n";
+                document.getElementById('summary-text').value = detailLog + vendorMessage;
 
-            Object.entries(vendorSummary).forEach(([vendor, items]) => {
-                vendorMessage += `\n🏢 廠商：${vendor}\n-------------------\n`;
-                let vTotal = 0;
-                Object.entries(items).forEach(([pName, qty]) => {
-                    vendorMessage += `${pName} : ${qty}\n`;
-                    vTotal += qty;
-                });
-                vendorMessage += `小計：${vTotal}\n`;
-            });
-
-            document.getElementById('summary-text').value = detailLog + vendorMessage;
+            } catch (err) {
+                document.getElementById('summary-text').value = "讀取失敗，請確認網路連線或 API 設定。";
+            }
         }
 
         function copySummary() {
@@ -68,14 +102,14 @@
             if (!textarea.value) return;
             textarea.select();
             document.execCommand('copy');
-            alert('已複製叫貨總表！可以直接貼到 Line 分發給業務。');
+            alert('已複製叫貨總表！可以直接貼到 LINE 發給業務。');
         }
 
         function clearOrders() {
-            if (confirm("確定要清空所有叫貨紀錄嗎？")) {
+            if (confirm("確定要清空本機暫存紀錄嗎？（雲端試算表紀錄不受影響）")) {
                 localStorage.removeItem('salon_orders');
                 updateSummary();
-                alert("已清空紀錄！");
+                alert("已清空本機紀錄！");
             }
         }
 
