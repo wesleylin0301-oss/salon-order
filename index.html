@@ -42,6 +42,14 @@ details.category[open]>summary::after{content:'−'}
 button:disabled{background:#bbb!important}
 .searchbox{position:sticky;top:58px;z-index:15;background:#f5f5f7;padding-bottom:10px}
 .small{font-size:.86rem;color:#666}
+.selected-panel{border:2px solid #34c759;background:#f2fff5}
+.selected-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.selected-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:9px}
+.selected-item{border:1px solid #bfe8c8;border-radius:10px;background:#fff;padding:10px}
+.selected-name{font-weight:800;font-size:.9rem;word-break:break-word}
+.selected-series{font-size:.76rem;color:#666;margin-top:2px}
+.search-results{border:2px solid #007aff;background:#f3f8ff}
+.search-empty{text-align:center;padding:18px;color:#666}
 </style>
 </head>
 <body>
@@ -61,10 +69,15 @@ button:disabled{background:#bbb!important}
 </div>
 
 <div id="order-view">
-  <div class="card">
-    <b>快速搜尋色號</b>
-    <input id="search" class="input" placeholder="例如：7MT、清水灰、雙氧" oninput="renderProducts()">
-    <div class="small">商品已依系列與色系分類，點分類名稱即可展開／收合。</div>
+  <div class="card searchbox">
+    <b>🔎 搜尋商品</b>
+    <input id="search" class="input" placeholder="直接輸入色號或品名，例如：7MT、清水灰、雙氧" oninput="renderProducts()">
+    <div class="small">輸入後會直接顯示符合商品，可立即加減數量。</div>
+  </div>
+
+  <div id="selectedPanel" class="card selected-panel hidden">
+    <div class="selected-title"><h3 style="margin:0">✅ 本月已選商品</h3><span id="selectedCount" class="small"></span></div>
+    <div id="selectedList" class="selected-list"></div>
   </div>
 
   <div class="card">
@@ -160,23 +173,53 @@ function jsonp(params){
 function esc(s){return btoa(unescape(encodeURIComponent(s))).replace(/=/g,'')}
 function productId(series,code){return series+'|||'+code}
 
+function renderSelectedPanel(){
+  const entries=Object.entries(cart).filter(([,qty])=>Number(qty)>0);
+  const panel=document.getElementById('selectedPanel');
+  const list=document.getElementById('selectedList');
+  const count=document.getElementById('selectedCount');
+  if(!entries.length){panel.classList.add('hidden');list.innerHTML='';count.textContent='';return}
+  panel.classList.remove('hidden');
+  count.textContent=`${entries.length} 個品項`;
+  list.innerHTML=entries.map(([id,qty])=>{
+    const [series,code]=id.split('|||');
+    return `<div class="selected-item"><div class="selected-name">${code}</div><div class="selected-series">${series}</div><div class="controls"><button class="qtybtn" onclick='change(${JSON.stringify(id)},-1)'>−</button><span class="qty">${qty}</span><button class="qtybtn" onclick='change(${JSON.stringify(id)},1)'>＋</button></div></div>`;
+  }).join('');
+}
+
 function renderProducts(){
   const root=document.getElementById('products');
   const keyword=document.getElementById('search').value.trim().toLowerCase();
+  renderSelectedPanel();
   root.innerHTML='';
-  catalog.forEach((series,seriesIndex)=>{
-    const matchedCategories=series.categories.map(cat=>({
-      ...cat,
-      items:cat.items.filter(code=>!keyword||series.series.toLowerCase().includes(keyword)||cat.name.toLowerCase().includes(keyword)||code.toLowerCase().includes(keyword))
-    })).filter(cat=>cat.items.length);
-    if(!matchedCategories.length)return;
 
+  if(keyword){
+    const matches=[];
+    catalog.forEach(series=>series.categories.forEach(cat=>cat.items.forEach(code=>{
+      if(series.series.toLowerCase().includes(keyword)||cat.name.toLowerCase().includes(keyword)||code.toLowerCase().includes(keyword)){
+        matches.push({series:series.series,category:cat.name,code});
+      }
+    })));
+    const card=document.createElement('div');
+    card.className='card search-results';
+    card.innerHTML=`<h3 style="margin-top:0">搜尋結果（${matches.length}）</h3>`+
+      (matches.length?`<div class="grid">${matches.map(x=>{
+        const id=productId(x.series,x.code),qty=cart[id]||0;
+        return `<div id="item-${esc(id)}" class="item ${qty>0?'selected':''}"><div class="code">${x.code}</div><div class="small">${x.category}</div><div class="controls"><button class="qtybtn" onclick='change(${JSON.stringify(id)},-1)'>−</button><span class="qty" id="q-${esc(id)}">${qty}</span><button class="qtybtn" onclick='change(${JSON.stringify(id)},1)'>＋</button></div></div>`;
+      }).join('')}</div>`:'<div class="search-empty">找不到符合的商品，請換一個關鍵字。</div>');
+    root.appendChild(card);
+    return;
+  }
+
+  catalog.forEach((series,seriesIndex)=>{
     const wrap=document.createElement('div');
     wrap.className='series-card';
     let html=`<div class="series-head">${series.series}</div>`;
-    matchedCategories.forEach((cat,catIndex)=>{
-      const shouldOpen=Boolean(keyword)||(seriesIndex===0&&catIndex===0);
-      html+=`<details class="category" ${shouldOpen?'open':''}><summary>${cat.name}<span class="small">${cat.items.length} 色</span></summary><div class="category-body"><div class="grid">`;
+    series.categories.forEach((cat,catIndex)=>{
+      const selectedInCategory=cat.items.filter(code=>(cart[productId(series.series,code)]||0)>0).length;
+      const shouldOpen=selectedInCategory>0||(seriesIndex===0&&catIndex===0);
+      const badge=selectedInCategory?`<span class="small" style="color:#34c759;font-weight:800">已選 ${selectedInCategory} 項</span>`:`<span class="small">${cat.items.length} 色</span>`;
+      html+=`<details class="category" ${shouldOpen?'open':''}><summary>${cat.name}${badge}</summary><div class="category-body"><div class="grid">`;
       cat.items.forEach(code=>{
         const id=productId(series.series,code),qty=cart[id]||0;
         html+=`<div id="item-${esc(id)}" class="item ${qty>0?'selected':''}"><div class="code">${code}</div><div class="controls"><button class="qtybtn" onclick='change(${JSON.stringify(id)},-1)'>−</button><span class="qty" id="q-${esc(id)}">${qty}</span><button class="qtybtn" onclick='change(${JSON.stringify(id)},1)'>＋</button></div></div>`;
@@ -187,7 +230,6 @@ function renderProducts(){
     root.appendChild(wrap);
   });
 }
-
 function change(id,delta){
   if(locked)return alert('本月已截止');
   cart[id]=Math.max(0,(cart[id]||0)+delta);
@@ -196,6 +238,7 @@ function change(id,delta){
   const box=document.getElementById('item-'+esc(id));
   if(box)box.classList.toggle('selected',cart[id]>0);
   updateTotal();
+  renderSelectedPanel();
 }
 
 function addCustom(){
