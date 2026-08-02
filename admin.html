@@ -1,103 +1,11 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>沙龍叫貨管理系統 - 店長後台</title>
-    <style>
-        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { margin: 0; padding: 15px; background: #f5f5f7; color: #333; }
-        h1 { text-align: center; color: #2c3e50; font-size: 1.4rem; margin-bottom: 15px; }
-        .card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        textarea { width: 100%; height: 420px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: monospace; font-size: 0.9rem; line-height: 1.4; }
-        .btn-copy { width: 100%; background: #007aff; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; font-size: 1rem; }
-        .btn-refresh { width: 100%; background: #34c759; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; }
-    </style>
-</head>
-<body>
-
-    <h1>🔒 店長專用 - 叫貨總統計</h1>
-
-    <div class="card">
-        <textarea id="summary-text" readonly placeholder="資料同步載入中..."></textarea>
-        <button class="btn-refresh" onclick="updateSummary()">🔄 重新整理雲端叫貨數據</button>
-        <button class="btn-copy" onclick="copySummary()">📋 一鍵複製總表（傳給廠商業務）</button>
-    </div>
-
-    <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbwj7gqYH6D18vM1bOw4CuryA0iT-Kt53fchGl4z4uzMjJBBlUVtVcLADYy0WtWFgkCY/exec";
-
-        function fetchJSONP(url) {
-            return new Promise((resolve, reject) => {
-                const callbackName = 'jsonp_cb_' + Math.round(100000 * Math.random());
-                window[callbackName] = function(data) {
-                    delete window[callbackName];
-                    document.body.removeChild(script);
-                    resolve(data);
-                };
-                const script = document.createElement('script');
-                script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + callbackName;
-                script.onerror = () => reject(new Error('JSONP Request Failed'));
-                document.body.appendChild(script);
-            });
-        }
-
-        async function updateSummary() {
-            document.getElementById('summary-text').value = "正在讀取雲端最新叫貨紀錄，請稍候...";
-            
-            try {
-                let detailLog = "【各設計師叫貨明細（含日期時間）】\n";
-                let vendorSummary = {};
-
-                const rows = await fetchJSONP(API_URL);
-                
-                if (!rows || rows.length <= 1) {
-                    document.getElementById('summary-text').value = "目前雲端尚無任何叫貨紀錄。";
-                    return;
-                }
-
-                const dataRows = rows.slice(1);
-                
-                dataRows.forEach(r => {
-                    const timeStr = r[0];
-                    const designer = r[1];
-                    const vendor = r[2];
-                    const pName = r[3];
-                    const qty = parseInt(r[4]) || 0;
-
-                    detailLog += `📅 ${timeStr} - 👤 ${designer}: [${vendor}] ${pName} x ${qty}\n`;
-
-                    if (!vendorSummary[vendor]) vendorSummary[vendor] = {};
-                    vendorSummary[vendor][pName] = (vendorSummary[vendor][pName] || 0) + qty;
-                });
-
-                let vendorMessage = "\n===================\n【各廠商叫貨統計總清單】\n";
-                Object.entries(vendorSummary).forEach(([vendor, items]) => {
-                    vendorMessage += `\n🏢 廠商：${vendor}\n-------------------\n`;
-                    let vTotal = 0;
-                    Object.entries(items).forEach(([pName, qty]) => {
-                        vendorMessage += `${pName} : ${qty}\n`;
-                        vTotal += qty;
-                    });
-                    vendorMessage += `小計：${vTotal}\n`;
-                });
-
-                document.getElementById('summary-text').value = detailLog + vendorMessage;
-
-            } catch (err) {
-                document.getElementById('summary-text').value = "讀取失敗，請確認網路連線或 Google 部署設定。";
-            }
-        }
-
-        function copySummary() {
-            const textarea = document.getElementById('summary-text');
-            if (!textarea.value) return;
-            textarea.select();
-            document.execCommand('copy');
-            alert('已複製叫貨總表！可以直接貼到 LINE 發給業務。');
-        }
-
-        updateSummary();
-    </script>
-</body>
-</html>
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>店長叫貨後台</title><style>*{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{margin:0;padding:15px;background:#f5f5f7}.card{background:#fff;border-radius:12px;padding:15px;margin-bottom:15px}.input,textarea,select{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;margin:5px 0 10px}button{padding:10px 14px;border:0;border-radius:8px;background:#007aff;color:#fff;font-weight:700;margin:3px}.danger{background:#ff3b30}.green{background:#34c759}.row{display:flex;gap:8px;flex-wrap:wrap}.designer{border-top:1px solid #eee;padding:12px 0}textarea{height:360px;font-family:monospace}</style></head><body><h1>🔒 店長叫貨後台</h1><div class="card"><b>店長密碼</b><input id="key" class="input" type="password" placeholder="預設 1234，請在 Code.gs 修改"><b>查看月份</b><input id="month" class="input" type="month"><div class="row"><button class="green" onclick="loadSummary()">重新整理</button><button onclick="setLock('open')">強制開放</button><button class="danger" onclick="setLock('locked')">立即截止</button><button onclick="setLock('auto')">恢復每月20日自動截止</button></div><div id="status"></div></div><div class="card"><h3>各設計師貨單</h3><div id="designers">尚未讀取</div></div><div class="card"><h3>各廠商總統計</h3><textarea id="summary" readonly></textarea><button onclick="copyText()">複製總表</button></div><form id="postForm" method="POST" target="postFrame" style="display:none"><input name="action"><input name="requestId"><input name="adminKey"><input name="designer"><input name="month"><input name="mode"></form><iframe name="postFrame" style="display:none"></iframe><script>
+const API_URL="https://script.google.com/macros/s/AKfycbwj7gqYH6D18vM1bOw4CuryA0iT-Kt53fchGl4z4uzMjJBBlUVtVcLADYy0WtWFgkCY/exec";
+function jsonp(params){return new Promise((resolve,reject)=>{const cb='cb_'+Date.now()+'_'+Math.floor(Math.random()*9999);window[cb]=d=>{delete window[cb];s.remove();resolve(d)};const s=document.createElement('script');s.onerror=()=>{delete window[cb];s.remove();reject(new Error('連線失敗'))};s.src=API_URL+'?'+new URLSearchParams({...params,callback:cb,_:Date.now()});document.body.appendChild(s)})}
+async function init(){const d=await jsonp({action:'bootstrap'});document.getElementById('month').value=d.month;document.getElementById('status').textContent=d.locked?'目前：🔒 已截止':'目前：✅ 開放中'}
+async function loadSummary(){const key=document.getElementById('key').value,month=document.getElementById('month').value;if(!key)return alert('請輸入店長密碼');try{const d=await jsonp({action:'summary',adminKey:key,month});if(!d.ok)throw new Error(d.message);document.getElementById('status').textContent=d.locked?'目前：🔒 已截止（'+d.lockMode+'）':'目前：✅ 開放中（'+d.lockMode+'）';const designers=document.getElementById('designers');const entries=Object.entries(d.designers);designers.innerHTML=entries.length?entries.map(([name,o])=>`<div class="designer"><b>${name}</b>｜最後更新 ${o.updatedAt}<button class="danger" onclick='deleteOrder(${JSON.stringify(name)})'>刪除此人本月貨單</button>${o.items.map(i=>`<div>・[${i.vendor}] ${i.name} × ${i.qty}</div>`).join('')}</div>`).join(''):'本月尚無貨單';let text=`【${d.month} 各廠商叫貨總表】\n`;Object.entries(d.vendors).forEach(([vendor,items])=>{text+=`\n廠商：${vendor}\n`;let total=0;Object.entries(items).forEach(([name,qty])=>{text+=`${name}：${qty}\n`;total+=qty});text+=`小計：${total}\n`});document.getElementById('summary').value=text}catch(e){alert(e.message)}}
+async function post(action,extra={}){const requestId=crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random(),form=document.getElementById('postForm');form.action=API_URL;form.action.value=action;form.requestId.value=requestId;form.adminKey.value=document.getElementById('key').value;form.designer.value=extra.designer||'';form.month.value=document.getElementById('month').value;form.mode.value=extra.mode||'';form.submit();for(let i=0;i<20;i++){await new Promise(r=>setTimeout(r,700));const d=await jsonp({action:'operation',requestId});if(d.found){if(d.status!=='success')throw new Error(d.message);return d}}throw new Error('後端未確認操作')}
+async function deleteOrder(name){if(!confirm('確定刪除 '+name+' 的本月貨單？'))return;try{await post('deleteOrder',{designer:name});alert('已刪除');loadSummary()}catch(e){alert(e.message)}}
+async function setLock(mode){try{await post('setLock',{mode});alert('設定完成');loadSummary()}catch(e){alert(e.message)}}
+function copyText(){const t=document.getElementById('summary');t.select();navigator.clipboard?navigator.clipboard.writeText(t.value):document.execCommand('copy');alert('已複製')}
+init();
+</script></body></html>
