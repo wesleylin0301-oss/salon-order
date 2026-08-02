@@ -207,20 +207,21 @@
             try {
                 await fetch(API_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain' },
                     body: JSON.stringify(payload)
                 });
 
-                alert('叫貨成功！叫貨單已送出。');
+                alert('叫貨單已成功送出！');
                 cart = {};
                 document.getElementById('custom-vendor').value = '';
                 document.getElementById('custom-name').value = '';
                 document.getElementById('custom-qty').value = '1';
                 renderProducts();
                 document.getElementById('total-qty').innerText = '0';
-                setTimeout(loadHistory, 1000);
+                setTimeout(loadHistory, 1500);
             } catch (err) {
-                alert('傳送失敗，請檢查網路或 Google 部署設定。');
+                alert('傳送失敗，請確認網路連線或權限設定。');
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerText = '送出叫貨單';
@@ -237,7 +238,6 @@
                 document.getElementById('view-order').style.display = 'none';
                 document.getElementById('view-history').style.display = 'block';
                 document.getElementById('btn-order-view').classList.remove('active');
-                document.getElementById('btn-history-view').classList.remove('active');
                 document.getElementById('btn-history-view').classList.add('active');
                 loadHistory();
             }
