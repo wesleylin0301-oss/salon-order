@@ -78,8 +78,17 @@
         </div>
     </div>
 
+    <!-- 隱藏的背景發送表單 -->
+    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(submitted){onSuccess();}"></iframe>
+    <form id="google-form" method="POST" target="hidden_iframe" style="display:none;">
+        <input type="hidden" name="designer" id="form-designer">
+        <input type="hidden" name="items" id="form-items">
+    </form>
+
     <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbyA5el2vW-fhgMt3UqqPc4QOocd0KfJ_s1OC0BHztS1Zj0QJEEsJriiXGBbR75jJ7CQ/exec";
+        const API_URL = "https://script.google.com/macros/s/AKfycbwj7gqYH6D18vM1bOw4CuryA0iT-Kt53fchGl4z4uzMjJBBlUVtVcLADYy0WtWFgkCY/exec";
+
+        let submitted = false;
 
         const products = [
             { 
@@ -177,7 +186,7 @@
             document.getElementById('total-qty').innerText = totalCart;
         }
 
-        async function submitOrder() {
+        function submitOrder() {
             if(isLocked) { alert('每月 20 號後截止叫貨！'); return; }
 
             const name = document.getElementById('designer-name').value.trim();
@@ -202,30 +211,30 @@
             submitBtn.disabled = true;
             submitBtn.innerText = '傳送中...';
 
-            const payload = { designer: name, items: orderItems };
+            const form = document.getElementById('google-form');
+            form.action = API_URL;
+            document.getElementById('form-designer').value = name;
+            document.getElementById('form-items').value = JSON.stringify(orderItems);
+            
+            submitted = true;
+            form.submit();
+        }
 
-            try {
-                await fetch(API_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify(payload)
-                });
-
-                alert('叫貨單已成功送出！');
-                cart = {};
-                document.getElementById('custom-vendor').value = '';
-                document.getElementById('custom-name').value = '';
-                document.getElementById('custom-qty').value = '1';
-                renderProducts();
-                document.getElementById('total-qty').innerText = '0';
-                setTimeout(loadHistory, 1500);
-            } catch (err) {
-                alert('傳送失敗，請確認網路連線或權限設定。');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerText = '送出叫貨單';
-            }
+        function onSuccess() {
+            alert('叫貨單已成功送出！');
+            cart = {};
+            document.getElementById('custom-vendor').value = '';
+            document.getElementById('custom-name').value = '';
+            document.getElementById('custom-qty').value = '1';
+            renderProducts();
+            document.getElementById('total-qty').innerText = '0';
+            
+            const submitBtn = document.getElementById('btn-submit-order');
+            submitBtn.disabled = false;
+            submitBtn.innerText = '送出叫貨單';
+            submitted = false;
+            
+            setTimeout(loadHistory, 1000);
         }
 
         function switchView(view) {
