@@ -12,7 +12,6 @@
         textarea { width: 100%; height: 420px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: monospace; font-size: 0.9rem; line-height: 1.4; }
         .btn-copy { width: 100%; background: #007aff; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; font-size: 1rem; }
         .btn-refresh { width: 100%; background: #34c759; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; }
-        .btn-clear { width: 100%; background: #ff3b30; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -23,11 +22,25 @@
         <textarea id="summary-text" readonly placeholder="資料同步載入中..."></textarea>
         <button class="btn-refresh" onclick="updateSummary()">🔄 重新整理雲端叫貨數據</button>
         <button class="btn-copy" onclick="copySummary()">📋 一鍵複製總表（傳給廠商業務）</button>
-        <button class="btn-clear" onclick="clearOrders()">🗑️ 清空歷史紀錄（僅清空本機）</button>
     </div>
 
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbxTO4MHR49JFCVxk3p_8vWkb8RyMAgxnR2pSYw8Ka4yuYWTABZ0rmCDLXzm4ZUSSDv5/exec";
+
+        function fetchJSONP(url) {
+            return new Promise((resolve, reject) => {
+                const callbackName = 'jsonp_cb_' + Math.round(100000 * Math.random());
+                window[callbackName] = function(data) {
+                    delete window[callbackName];
+                    document.body.removeChild(script);
+                    resolve(data);
+                };
+                const script = document.createElement('script');
+                script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + callbackName;
+                script.onerror = () => reject(new Error('JSONP Request Failed'));
+                document.body.appendChild(script);
+            });
+        }
 
         async function updateSummary() {
             document.getElementById('summary-text').value = "正在讀取雲端最新叫貨紀錄，請稍候...";
@@ -36,8 +49,7 @@
                 let detailLog = "【各設計師叫貨明細（含日期時間）】\n";
                 let vendorSummary = {};
 
-                const res = await fetch(API_URL);
-                const rows = await res.json();
+                const rows = await fetchJSONP(API_URL);
                 
                 if (!rows || rows.length <= 1) {
                     document.getElementById('summary-text').value = "目前雲端尚無任何叫貨紀錄。";
@@ -73,7 +85,7 @@
                 document.getElementById('summary-text').value = detailLog + vendorMessage;
 
             } catch (err) {
-                document.getElementById('summary-text').value = "讀取失敗，請確認網路連線或 API 設定。";
+                document.getElementById('summary-text').value = "讀取失敗，請確認網路連線或 Google 部署設定。";
             }
         }
 
@@ -83,14 +95,6 @@
             textarea.select();
             document.execCommand('copy');
             alert('已複製叫貨總表！可以直接貼到 LINE 發給業務。');
-        }
-
-        function clearOrders() {
-            if (confirm("確定要清空本機暫存紀錄嗎？（雲端試算表紀錄不受影響）")) {
-                localStorage.removeItem('salon_orders');
-                updateSummary();
-                alert("已清空本機紀錄！");
-            }
         }
 
         updateSummary();
