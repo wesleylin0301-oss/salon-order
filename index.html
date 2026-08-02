@@ -45,7 +45,7 @@
     <div id="view-order">
         <div class="card">
             <label><b>叫貨設計師姓名：</b></label>
-            <input type="text" id="designer-name" placeholder="請輸入姓名（必填）" class="input-field" onchange="loadHistory()">
+            <input type="text" id="designer-name" placeholder="請輸入姓名（必填）" class="input-field" onkeyup="loadHistory()">
         </div>
 
         <!-- 自訂/特殊商品填寫區 -->
@@ -79,8 +79,7 @@
     </div>
 
     <script>
-        // ⚠️ 請把引號內改為你步驟2取得的新網址
-        const API_URL = "YOUR_NEW_GOOGLE_URL";
+        const API_URL = "https://script.google.com/macros/s/AKfycbxTO4MHR49JFCVxk3p_8vWkb8RyMAgxnR2pSYw8Ka4yuYWTABZ0rmCDLXzm4ZUSSDv5/exec";
 
         const products = [
             { 
@@ -206,7 +205,6 @@
             const payload = { designer: name, items: orderItems };
 
             try {
-                // 使用 text/plain 繞過 CORS 阻擋
                 await fetch(API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -220,7 +218,7 @@
                 document.getElementById('custom-qty').value = '1';
                 renderProducts();
                 document.getElementById('total-qty').innerText = '0';
-                loadHistory();
+                setTimeout(loadHistory, 1000);
             } catch (err) {
                 alert('傳送失敗，請檢查網路或 Google 部署設定。');
             } finally {
@@ -244,6 +242,22 @@
             }
         }
 
+        // 使用 JSONP 技術完美突破跨域限制
+        function fetchJSONP(url) {
+            return new Promise((resolve, reject) => {
+                const callbackName = 'jsonp_cb_' + Math.round(100000 * Math.random());
+                window[callbackName] = function(data) {
+                    delete window[callbackName];
+                    document.body.removeChild(script);
+                    resolve(data);
+                };
+                const script = document.createElement('script');
+                script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + callbackName;
+                script.onerror = () => reject(new Error('JSONP Request Failed'));
+                document.body.appendChild(script);
+            });
+        }
+
         async function loadHistory() {
             const name = document.getElementById('designer-name').value.trim();
             const container = document.getElementById('history-container');
@@ -252,8 +266,7 @@
             container.innerHTML = '載入紀錄中...';
 
             try {
-                const res = await fetch(API_URL);
-                const rows = await res.json();
+                const rows = await fetchJSONP(API_URL);
                 
                 const userRows = rows.slice(1).filter(r => r[1] === name);
                 
@@ -285,7 +298,7 @@
                 });
                 container.innerHTML = html;
             } catch (e) {
-                container.innerHTML = '無法載入歷史紀錄。';
+                container.innerHTML = '無法載入歷史紀錄，請重新整理頁面試試。';
             }
         }
 
