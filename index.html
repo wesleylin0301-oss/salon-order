@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>沙龍叫貨系統</title>
+<title>WD叫貨系統</title>
 <style>
 *{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 body{margin:0;padding:15px;background:#f5f5f7;color:#222}
@@ -50,10 +50,18 @@ button:disabled{background:#bbb!important}
 .selected-series{font-size:.76rem;color:#666;margin-top:2px}
 .search-results{border:2px solid #007aff;background:#f3f8ff}
 .search-empty{text-align:center;padding:18px;color:#666}
+.department{margin-bottom:16px;border-radius:16px;overflow:hidden;box-shadow:0 3px 12px #00000012;background:#fff}
+details.department>summary{cursor:pointer;list-style:none;padding:16px 17px;font-weight:900;font-size:1.15rem;display:flex;justify-content:space-between;align-items:center;background:#1f2937;color:#fff}
+details.department>summary::-webkit-details-marker{display:none}
+details.department>summary::after{content:'＋';font-size:22px}
+details.department[open]>summary::after{content:'−'}
+.department-body{padding:12px;background:#eef1f5}
+.department-count{font-size:.78rem;font-weight:700;opacity:.85;margin-left:auto;margin-right:12px}
+.empty-department{background:#fff;border-radius:12px;padding:20px;text-align:center;color:#777}
 </style>
 </head>
 <body>
-<h1>💇‍♂️ 沙龍叫貨系統</h1>
+<h1>💇‍♂️ WD叫貨系統</h1>
 <div id="notice" class="notice">正在連線…</div>
 <div class="tabs">
   <button id="tab-order" class="active" onclick="showTab('order')">📝 我要叫貨</button>
@@ -120,39 +128,46 @@ button:disabled{background:#bbb!important}
 <script>
 const API_URL="https://script.google.com/macros/s/AKfycbwj7gqYH6D18vM1bOw4CuryA0iT-Kt53fchGl4z4uzMjJBBlUVtVcLADYy0WtWFgkCY/exec";
 
-const catalog=[
-  {series:"Flole 綻放系列 ($188)",categories:[
-    {name:"自然色 NN",items:["2NN","3NN","4NN","5NN","6NN","7NN","8NN","10NN"]},
-    {name:"霧感色 MT",items:["3MT","4MT","5MT","6MT","7MT","8MT","10MT","12MT"]},
-    {name:"自然棕 NB",items:["3NB","4NB","5NB","6NB","7NB","8NB","10NB","12NB"]},
-    {name:"綠棕 GR",items:["5GR","6GR","7GR","8GR","10GR","12GR"]},
-    {name:"冷棕 CB",items:["5CB","6CB","7CB","8CB","10CB","12CB"]},
-    {name:"粉紫 PA",items:["5PA","6PA","7PA","8PA","10PA","12PA"]},
-    {name:"薰衣草 LV",items:["5LV","6LV","7LV","8LV","10LV","12LV"]},
-    {name:"粉紅 PI",items:["5PI","6PI","7PI","8PI","10PI","12PI"]},
-    {name:"調色／特殊",items:["CLEAR","LIFT","0-RED","0-BLUE","0-VIOLET","0-YELLOW","0-GREEN"]}
+const departments=[
+  {name:"染膏",icon:"🎨",defaultOpen:true,series:[
+    {series:"Flole 綻放系列 ($188)",categories:[
+      {name:"自然色 NN",items:["2NN","3NN","4NN","5NN","6NN","7NN","8NN","10NN"]},
+      {name:"霧感色 MT",items:["3MT","4MT","5MT","6MT","7MT","8MT","10MT","12MT"]},
+      {name:"自然棕 NB",items:["3NB","4NB","5NB","6NB","7NB","8NB","10NB","12NB"]},
+      {name:"綠棕 GR",items:["5GR","6GR","7GR","8GR","10GR","12GR"]},
+      {name:"冷棕 CB",items:["5CB","6CB","7CB","8CB","10CB","12CB"]},
+      {name:"粉紫 PA",items:["5PA","6PA","7PA","8PA","10PA","12PA"]},
+      {name:"薰衣草 LV",items:["5LV","6LV","7LV","8LV","10LV","12LV"]},
+      {name:"粉紅 PI",items:["5PI","6PI","7PI","8PI","10PI","12PI"]},
+      {name:"調色／特殊",items:["CLEAR","LIFT","0-RED","0-BLUE","0-VIOLET","0-YELLOW","0-GREEN"]}
+    ]},
+    {series:"Flole 露西亞系列 ($188)",categories:[
+      {name:"基礎／特殊色",items:["增量劑14","牛奶白10","星際灰7","鐵木棕3","曜石黑1","極光灰14"]},
+      {name:"清水灰",items:["清水灰13","清水灰11","清水灰9","清水灰7"]},
+      {name:"珍珠灰",items:["珍珠灰13","珍珠灰11","珍珠灰9","珍珠灰7"]},
+      {name:"迷霧藍",items:["迷霧藍13","迷霧藍11","迷霧藍9","迷霧藍7"]},
+      {name:"薄荷綠",items:["薄荷綠13","薄荷綠11","薄荷綠9","薄荷綠7"]},
+      {name:"珊瑚粉",items:["珊瑚粉13","珊瑚粉11","珊瑚粉9","珊瑚粉7"]},
+      {name:"薰衣草",items:["薰衣草13","薰衣草11","薰衣草9","薰衣草7"]},
+      {name:"蜜桃桔",items:["蜜桃桔13","蜜桃桔11","蜜桃桔9","蜜桃桔7"]}
+    ]},
+    {series:"Flole 根本系列 ($188)",categories:[
+      {name:"MTB",items:["10MTB","M9TB","8MTB","7MTB","6MTB","5MTB"]},
+      {name:"CB",items:["10CB","9CB","8CB","7CB","6CB","5CB"]},
+      {name:"NGB",items:["10NGB","9NGB","8NGB","7NGB","6NGB","5NGB"]},
+      {name:"BEB",items:["10BEB","9BEB","8BEB","7BEB","6BEB","5BEB"]},
+      {name:"MGB",items:["10MGB","9MGB","8MGB","7MGB","6MGB","5MGB"]}
+    ]}
   ]},
-  {series:"Flole 露西亞系列 ($188)",categories:[
-    {name:"基礎／特殊色",items:["增量劑14","牛奶白10","星際灰7","鐵木棕3","曜石黑1","極光灰14"]},
-    {name:"清水灰",items:["清水灰13","清水灰11","清水灰9","清水灰7"]},
-    {name:"珍珠灰",items:["珍珠灰13","珍珠灰11","珍珠灰9","珍珠灰7"]},
-    {name:"迷霧藍",items:["迷霧藍13","迷霧藍11","迷霧藍9","迷霧藍7"]},
-    {name:"薄荷綠",items:["薄荷綠13","薄荷綠11","薄荷綠9","薄荷綠7"]},
-    {name:"珊瑚粉",items:["珊瑚粉13","珊瑚粉11","珊瑚粉9","珊瑚粉7"]},
-    {name:"薰衣草",items:["薰衣草13","薰衣草11","薰衣草9","薰衣草7"]},
-    {name:"蜜桃桔",items:["蜜桃桔13","蜜桃桔11","蜜桃桔9","蜜桃桔7"]}
+  {name:"藥水",icon:"🧴",defaultOpen:false,series:[
+    {series:"Flole 雙氧水 ($200)",categories:[
+      {name:"雙氧濃度",items:["3%","6%","9%","12%"]}
+    ]}
   ]},
-  {series:"Flole 根本系列 ($188)",categories:[
-    {name:"MTB",items:["10MTB","M9TB","8MTB","7MTB","6MTB","5MTB"]},
-    {name:"CB",items:["10CB","9CB","8CB","7CB","6CB","5CB"]},
-    {name:"NGB",items:["10NGB","9NGB","8NGB","7NGB","6NGB","5NGB"]},
-    {name:"BEB",items:["10BEB","9BEB","8BEB","7BEB","6BEB","5BEB"]},
-    {name:"MGB",items:["10MGB","9MGB","8MGB","7MGB","6MGB","5MGB"]}
-  ]},
-  {series:"Flole 雙氧水 ($200)",categories:[
-    {name:"雙氧濃度",items:["3%","6%","9%","12%"]}
-  ]}
+  {name:"店販商品",icon:"🛍️",defaultOpen:false,series:[]}
 ];
+
+function allSeries(){return departments.flatMap(d=>d.series)}
 
 let cart={},customItems=[],month='',locked=false,lastLoadedItems=[],lastUpdatedAt='';
 const designerInput=document.getElementById('designer');
@@ -195,39 +210,58 @@ function renderProducts(){
 
   if(keyword){
     const matches=[];
-    catalog.forEach(series=>series.categories.forEach(cat=>cat.items.forEach(code=>{
-      if(series.series.toLowerCase().includes(keyword)||cat.name.toLowerCase().includes(keyword)||code.toLowerCase().includes(keyword)){
-        matches.push({series:series.series,category:cat.name,code});
+    departments.forEach(dept=>dept.series.forEach(series=>series.categories.forEach(cat=>cat.items.forEach(code=>{
+      if(dept.name.toLowerCase().includes(keyword)||series.series.toLowerCase().includes(keyword)||cat.name.toLowerCase().includes(keyword)||code.toLowerCase().includes(keyword)){
+        matches.push({department:dept.name,series:series.series,category:cat.name,code});
       }
-    })));
+    }))));
     const card=document.createElement('div');
     card.className='card search-results';
     card.innerHTML=`<h3 style="margin-top:0">搜尋結果（${matches.length}）</h3>`+
       (matches.length?`<div class="grid">${matches.map(x=>{
         const id=productId(x.series,x.code),qty=cart[id]||0;
-        return `<div id="item-${esc(id)}" class="item ${qty>0?'selected':''}"><div class="code">${x.code}</div><div class="small">${x.category}</div><div class="controls"><button class="qtybtn" onclick='change(${JSON.stringify(id)},-1)'>−</button><span class="qty" id="q-${esc(id)}">${qty}</span><button class="qtybtn" onclick='change(${JSON.stringify(id)},1)'>＋</button></div></div>`;
+        return `<div id="item-${esc(id)}" class="item ${qty>0?'selected':''}"><div class="code">${x.code}</div><div class="small">${x.department}｜${x.category}</div><div class="controls"><button class="qtybtn" onclick='change(${JSON.stringify(id)},-1)'>−</button><span class="qty" id="q-${esc(id)}">${qty}</span><button class="qtybtn" onclick='change(${JSON.stringify(id)},1)'>＋</button></div></div>`;
       }).join('')}</div>`:'<div class="search-empty">找不到符合的商品，請換一個關鍵字。</div>');
     root.appendChild(card);
     return;
   }
 
-  catalog.forEach((series,seriesIndex)=>{
-    const wrap=document.createElement('div');
-    wrap.className='series-card';
-    let html=`<div class="series-head">${series.series}</div>`;
-    series.categories.forEach((cat,catIndex)=>{
-      const selectedInCategory=cat.items.filter(code=>(cart[productId(series.series,code)]||0)>0).length;
-      const shouldOpen=selectedInCategory>0||(seriesIndex===0&&catIndex===0);
-      const badge=selectedInCategory?`<span class="small" style="color:#34c759;font-weight:800">已選 ${selectedInCategory} 項</span>`:`<span class="small">${cat.items.length} 色</span>`;
-      html+=`<details class="category" ${shouldOpen?'open':''}><summary>${cat.name}${badge}</summary><div class="category-body"><div class="grid">`;
-      cat.items.forEach(code=>{
-        const id=productId(series.series,code),qty=cart[id]||0;
-        html+=`<div id="item-${esc(id)}" class="item ${qty>0?'selected':''}"><div class="code">${code}</div><div class="controls"><button class="qtybtn" onclick='change(${JSON.stringify(id)},-1)'>−</button><span class="qty" id="q-${esc(id)}">${qty}</span><button class="qtybtn" onclick='change(${JSON.stringify(id)},1)'>＋</button></div></div>`;
+  departments.forEach((dept,deptIndex)=>{
+    const deptSelected=dept.series.reduce((sum,series)=>sum+series.categories.reduce((s,cat)=>s+cat.items.filter(code=>(cart[productId(series.series,code)]||0)>0).length,0),0);
+    const deptItemCount=dept.series.reduce((sum,series)=>sum+series.categories.reduce((s,cat)=>s+cat.items.length,0),0);
+    const deptWrap=document.createElement('details');
+    deptWrap.className='department';
+    if(dept.defaultOpen||deptSelected>0)deptWrap.open=true;
+    const summary=document.createElement('summary');
+    summary.innerHTML=`<span>${dept.icon} ${dept.name}</span><span class="department-count">${deptSelected?`已選 ${deptSelected} 項`:`${deptItemCount} 個品項`}</span>`;
+    deptWrap.appendChild(summary);
+    const body=document.createElement('div');
+    body.className='department-body';
+
+    if(!dept.series.length){
+      body.innerHTML='<div class="empty-department">目前尚未建立店販商品。可先使用上方「特殊商品」加入，之後再把固定品項放進此分類。</div>';
+    }else{
+      dept.series.forEach((series,seriesIndex)=>{
+        const wrap=document.createElement('div');
+        wrap.className='series-card';
+        let html=`<div class="series-head">${series.series}</div>`;
+        series.categories.forEach((cat,catIndex)=>{
+          const selectedInCategory=cat.items.filter(code=>(cart[productId(series.series,code)]||0)>0).length;
+          const shouldOpen=selectedInCategory>0;
+          const badge=selectedInCategory?`<span class="small" style="color:#34c759;font-weight:800">已選 ${selectedInCategory} 項</span>`:`<span class="small">${cat.items.length} 個</span>`;
+          html+=`<details class="category" ${shouldOpen?'open':''}><summary>${cat.name}${badge}</summary><div class="category-body"><div class="grid">`;
+          cat.items.forEach(code=>{
+            const id=productId(series.series,code),qty=cart[id]||0;
+            html+=`<div id="item-${esc(id)}" class="item ${qty>0?'selected':''}"><div class="code">${code}</div><div class="controls"><button class="qtybtn" onclick='change(${JSON.stringify(id)},-1)'>−</button><span class="qty" id="q-${esc(id)}">${qty}</span><button class="qtybtn" onclick='change(${JSON.stringify(id)},1)'>＋</button></div></div>`;
+          });
+          html+='</div></div></details>';
+        });
+        wrap.innerHTML=html;
+        body.appendChild(wrap);
       });
-      html+='</div></div></details>';
-    });
-    wrap.innerHTML=html;
-    root.appendChild(wrap);
+    }
+    deptWrap.appendChild(body);
+    root.appendChild(deptWrap);
   });
 }
 function change(id,delta){
@@ -294,7 +328,7 @@ function applyLoadedItems(items){
     if(String(i.name).startsWith('[自訂]')){
       customItems.push({vendor:i.vendor,name:i.name,qty:Number(i.qty)||0});return;
     }
-    for(const series of catalog){
+    for(const series of allSeries()){
       const prefix=series.series+' - ';
       if(String(i.name).startsWith(prefix)){
         cart[productId(series.series,String(i.name).slice(prefix.length))]=Number(i.qty)||0;
