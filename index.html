@@ -128,44 +128,7 @@ details.department[open]>summary::after{content:'−'}
 <script>
 const API_URL="https://script.google.com/macros/s/AKfycbwj7gqYH6D18vM1bOw4CuryA0iT-Kt53fchGl4z4uzMjJBBlUVtVcLADYy0WtWFgkCY/exec";
 
-const departments=[
-  {name:"染膏",icon:"🎨",defaultOpen:true,series:[
-    {series:"Flole 綻放系列 ($188)",categories:[
-      {name:"自然色 NN",items:["2NN","3NN","4NN","5NN","6NN","7NN","8NN","10NN"]},
-      {name:"霧感色 MT",items:["3MT","4MT","5MT","6MT","7MT","8MT","10MT","12MT"]},
-      {name:"自然棕 NB",items:["3NB","4NB","5NB","6NB","7NB","8NB","10NB","12NB"]},
-      {name:"綠棕 GR",items:["5GR","6GR","7GR","8GR","10GR","12GR"]},
-      {name:"冷棕 CB",items:["5CB","6CB","7CB","8CB","10CB","12CB"]},
-      {name:"粉紫 PA",items:["5PA","6PA","7PA","8PA","10PA","12PA"]},
-      {name:"薰衣草 LV",items:["5LV","6LV","7LV","8LV","10LV","12LV"]},
-      {name:"粉紅 PI",items:["5PI","6PI","7PI","8PI","10PI","12PI"]},
-      {name:"調色／特殊",items:["CLEAR","LIFT","0-RED","0-BLUE","0-VIOLET","0-YELLOW","0-GREEN"]}
-    ]},
-    {series:"Flole 露西亞系列 ($188)",categories:[
-      {name:"基礎／特殊色",items:["增量劑14","牛奶白10","星際灰7","鐵木棕3","曜石黑1","極光灰14"]},
-      {name:"清水灰",items:["清水灰13","清水灰11","清水灰9","清水灰7"]},
-      {name:"珍珠灰",items:["珍珠灰13","珍珠灰11","珍珠灰9","珍珠灰7"]},
-      {name:"迷霧藍",items:["迷霧藍13","迷霧藍11","迷霧藍9","迷霧藍7"]},
-      {name:"薄荷綠",items:["薄荷綠13","薄荷綠11","薄荷綠9","薄荷綠7"]},
-      {name:"珊瑚粉",items:["珊瑚粉13","珊瑚粉11","珊瑚粉9","珊瑚粉7"]},
-      {name:"薰衣草",items:["薰衣草13","薰衣草11","薰衣草9","薰衣草7"]},
-      {name:"蜜桃桔",items:["蜜桃桔13","蜜桃桔11","蜜桃桔9","蜜桃桔7"]}
-    ]},
-    {series:"Flole 根本系列 ($188)",categories:[
-      {name:"MTB",items:["10MTB","M9TB","8MTB","7MTB","6MTB","5MTB"]},
-      {name:"CB",items:["10CB","9CB","8CB","7CB","6CB","5CB"]},
-      {name:"NGB",items:["10NGB","9NGB","8NGB","7NGB","6NGB","5NGB"]},
-      {name:"BEB",items:["10BEB","9BEB","8BEB","7BEB","6BEB","5BEB"]},
-      {name:"MGB",items:["10MGB","9MGB","8MGB","7MGB","6MGB","5MGB"]}
-    ]}
-  ]},
-  {name:"藥水",icon:"🧴",defaultOpen:false,series:[
-    {series:"Flole 雙氧水 ($200)",categories:[
-      {name:"雙氧濃度",items:["3%","6%","9%","12%"]}
-    ]}
-  ]},
-  {name:"店販商品",icon:"🛍️",defaultOpen:false,series:[]}
-];
+const departments=[{"name":"染膏","icon":"🎨","defaultOpen":true,"series":[{"series":"Fiole｜根本系列","categories":[{"name":"BB","items":["10BB","5BB","6BB","7BB","8BB","9BB"]},{"name":"CB","items":["10CB","5CB","6CB","7CB","8CB","9CB"]},{"name":"GOB","items":["10GOB","5GOB","6GOB","7GOB","8GOB","9GOB"]},{"name":"MTB","items":["10MTB","5MTB","6MTB","7MTB","8MTB","9MTB"]},{"name":"NB","items":["10NB","3NB","4NB","5NB","6NB","7NB","8NB","9NB"]},{"name":"OLB","items":["10OLB","5OLB","6OLB","7OLB","8OLB","9OLB"]},{"name":"RB","items":["10RB","5RB","6RB","7RB","8RB","9RB"]},{"name":"WB","items":["10WB","5WB","6WB","7WB","8WB","9WB"]}]},{"series":"Fiole｜綻放系列","categories":[{"name":"GA","items":["10GA","12GA","4GA","5GA","6GA","7GA","8GA"]},{"name":"GB","items":["10GB","12GB","4GB","5GB","6GB","7GB","8GB"]},{"name":"GN","items":["10GN","12GN","4GN","5GN","6GN","7GN","8GN"]},{"name":"GNB","items":["10GNB","12GNB","2GNB","4GNB","5GNB","6GNB","7GNB","8GNB"]},{"name":"GP","items":["10GP","12GP","4GP","5GP","6GP","7GP","8GP"]},{"name":"GY","items":["10GY","12GY","4GY","5GY","6GY","7GY","8GY"]},{"name":"MT","items":["10MT","12MT","3MT","4MT","5MT","6MT","7MT","8MT"]},{"name":"NN","items":["10NN","2NN","3NN","4NN","5NN","6NN","7NN","8NN"]},{"name":"特殊色","items":["B10","B6","B8","BV10","BV6","BV8","C10","C8","G6","MB10","MB6","O10","O7","P10","P8","R7","RV10","RV6","RV8","V10","V6","V8","Y10","YM10","YM6","YM8","ライトナー"]}]},{"series":"Fiole｜露西亞系列","categories":[{"name":"增量劑","items":["增量劑14"]},{"name":"奶霜灰","items":["奶霜灰11","奶霜灰13","奶霜灰5","奶霜灰7","奶霜灰9"]},{"name":"宇宙紫","items":["宇宙紫5","宇宙紫6"]},{"name":"星際灰","items":["星際灰7"]},{"name":"曜石黑","items":["曜石黑1"]},{"name":"松石綠","items":["松石綠6"]},{"name":"極光灰","items":["極光灰14"]},{"name":"極光銀","items":["極光銀11","極光銀13","極光銀5","極光銀7","極光銀9"]},{"name":"水透藍","items":["水透藍7"]},{"name":"海軍藍","items":["海軍藍3","海軍藍5"]},{"name":"清水灰","items":["清水灰11","清水灰13","清水灰5","清水灰7","清水灰9"]},{"name":"潤色劑","items":["潤色劑"]},{"name":"牛奶白","items":["牛奶白10"]},{"name":"珊瑚粉","items":["珊瑚粉10","珊瑚粉6"]},{"name":"珊瑚紫","items":["珊瑚紫3","珊瑚紫5"]},{"name":"珍珠粉","items":["珍珠粉6"]},{"name":"琥珀橘","items":["琥珀橘10"]},{"name":"石榴紅","items":["石榴紅7"]},{"name":"粉蜜紫","items":["粉蜜紫14"]},{"name":"羅馬紅","items":["羅馬紅7"]},{"name":"胭脂粉","items":["胭脂粉11","胭脂粉13","胭脂粉5","胭脂粉7","胭脂粉9"]},{"name":"蜜桃粉","items":["蜜桃粉6"]},{"name":"螢光黃","items":["螢光黃11"]},{"name":"鐵木棕","items":["鐵木棕3"]},{"name":"黎米黃","items":["黎米黃11","黎米黃14","黎米黃5","黎米黃7","黎米黃8","黎米黃9"]}]},{"series":"哥德式｜喚采/喚癮 13系列","categories":[{"name":"喚采/喚癮 13系列","items":["13-COB","13-EM","13-FAP","13-GLAP","13-GLCA","13-GLVI","13-MNV","13-Nakedcoral","13-Nakedsand","13-Nakedwarm","13-SI"]}]},{"series":"哥德式｜喚采/喚癮 7系列","categories":[{"name":"喚采/喚癮 7系列","items":["7-COB","7-EM","7-FAP","7-GLAP","7-GLCA","7-GLVI","7-MNV","7-Nakedcoral","7-Nakedsand","7-Nakedwarm","7-SI"]}]},{"series":"哥德式｜喚采/喚癮 Deep/Pale","categories":[{"name":"喚采/喚癮 Deep/Pale","items":["Deep Blue","Deep Purple","Deep Silver","Pale Beige","Pale Blue","Pale Orange","Pale Pink","Pale Silver","Pale Violet","Pale Yellow"]}]},{"series":"萊肯｜重組染膏","categories":[{"name":"重組染膏","items":["萊肯重組染膏"]}]}]},{"name":"藥水","icon":"🧴","defaultOpen":false,"series":[{"series":"Fiole","categories":[{"name":"漂粉","items":["露西亞漂粉 極速｜500g"]},{"name":"其他","items":["QC｜250g"]},{"name":"植萃燙髮 2劑","items":["植萃燙髮 2劑 乳液狀｜400g","植萃燙髮 2劑 液狀｜2000ml","植萃燙髮 2劑 霜狀｜400g"]},{"name":"水光系列","items":["水光系列一劑 M1 藍｜400ml"]}]},{"series":"哥德式","categories":[{"name":"喚采雙氧水","items":["喚采雙氧水 3%｜1000ml","喚采雙氧水 6%｜1000ml","喚采雙氧水 9%｜1000ml"]},{"name":"AQ 水鑽光溫塑","items":["AQ 水鑽光溫塑 H1｜400g","AQ 水鑽光溫塑 N1｜400g","AQ 水鑽光溫塑 SH1｜400g"]},{"name":"Neo 溫塑 2劑","items":["Neo 溫塑 2劑 液狀｜800g","Neo 溫塑 2劑 霧狀｜800g"]}]}]},{"name":"洗髮/護髮","icon":"🧼","defaultOpen":false,"series":[{"series":"Fiole","categories":[{"name":"露西亞增色洗","items":["露西亞增色洗 橘｜250ml","露西亞增色洗 灰｜250ml","露西亞增色洗 粉紅｜250ml","露西亞增色洗 紫｜250ml"]}]},{"series":"哥德式 MILBON","categories":[{"name":"jemile fran","items":["jemile fran 洗髮精 S｜2500ml","jemile fran 洗髮精 S｜500ml","jemile fran 護髮 S｜2500g","jemile fran 護髮 S｜500g"]},{"name":"恆羽","items":["恆羽洗髮精 A｜1800ml","恆羽洗髮精 A｜500ml","恆羽護髮 M｜1800g","恆羽護髮 M｜500g"]},{"name":"柔漾","items":["柔漾洗髮精 SL｜1800ml","柔漾洗髮精 SL｜500ml","柔漾護髮素 WL｜1800ml","柔漾護髮素 WL｜500g"]}]}]},{"name":"護髮/造型","icon":"✨","defaultOpen":false,"series":[{"series":"哥德式","categories":[{"name":"修護果油","items":["抗曬修護果油｜120ml"]},{"name":"極度系列","items":["極度慕斯｜300ml","極度晶雕｜150ml"]},{"name":"漂後極潤","items":["漂後極潤果油 BC｜120ml","漂後極潤果露 BG｜120ml"]},{"name":"舞動造型噴霧","items":["舞動造型噴霧 塑型藍｜180g","舞動造型噴霧 柔光白｜180g","舞動造型噴霧 輕盈粉｜180g"]},{"name":"舞動髮蠟","items":["舞動髮蠟 動感黑｜80g"]}]}]},{"name":"店販商品","icon":"🛍️","defaultOpen":false,"series":[]},{"name":"其他耗材","icon":"📦","defaultOpen":false,"series":[{"series":"Fiole","categories":[{"name":"去色","items":["去色化妝水｜280ml"]},{"name":"隔離","items":["原子隔離噴霧"]}]},{"series":"LUIT","categories":[{"name":"洗髮露","items":["藜麥洗髮露｜1000ml"]}]},{"series":"艾淂","categories":[{"name":"保護膜","items":["艾淂保護膜極潤｜100g 小包"]}]}]}];
 
 function allSeries(){return departments.flatMap(d=>d.series)}
 
