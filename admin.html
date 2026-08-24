@@ -67,7 +67,7 @@ function renderDesignerBreakdown(d){
   const items=(raw.items||[]).map(latestSummaryItem),sentQty={};
   const batches=(d.sentBatches||[]).map((b,batchIndex)=>({
    ...b,batchIndex:batchIndex+1,
-   items:(b.items||[]).filter(x=>keyText(x.owner)===keyText(name)).map(x=>latestSummaryItem({...x,vendor:x.vendor||b.vendor}))
+   items:(b.items||[]).filter(x=>String(x.owner||'').trim().toLowerCase()===String(name||'').trim().toLowerCase()).map(x=>latestSummaryItem({...x,vendor:x.vendor||b.vendor}))
   })).filter(b=>b.items.length);
   batches.forEach(b=>b.items.forEach(x=>{const k=sentKey(name,x);sentQty[k]=(sentQty[k]||0)+x.qty}));
   const pending=items.map(x=>{const qty=Math.max(0,x.qty-(sentQty[sentKey(name,x)]||0));return {...x,qty,amount:qty*x.price}}).filter(x=>x.qty>0);
@@ -81,9 +81,11 @@ function renderVendorPendingBreakdown(d){
  const pending=pendingByVendor(d),vendorRows=Object.entries(d.vendors||{}).map(([vendor,o])=>[vendor,latestVendorItems(o,vendor)]);
  vendorStats.innerHTML=vendorRows.map(([vendor,items])=>{
   const additions=pending[vendor]||[],pendingQty=additions.reduce((s,x)=>s+x.qty,0),amount=items.reduce((s,x)=>s+x.amount,0);
+  const vendorBatches=(d.sentBatches||[]).map((b,batchIndex)=>({...b,batchIndex:batchIndex+1,items:(b.items||[]).filter(x=>String(x.vendor||b.vendor).trim().toLowerCase()===String(vendor).trim().toLowerCase())})).filter(b=>b.items.length);
   const additionHtml=additions.length?additions.map(x=>`<div class="line" style="background:#fff;padding:9px"><span><b>${esc(x.name)} ${esc(x.spec||'')}</b><br><small>設計師：${esc(x.owner)}</small></span><span class="right"><span class="badge">追加 ${x.qty}</span></span></div>`).join(''):'<div class="muted">目前沒有待送追加品項</div>';
+  const batchHtml=vendorBatches.length?vendorBatches.map(b=>`<div class="selected-item" style="margin-top:10px"><h3>第 ${b.batchIndex} 批</h3><div class="muted">送出時間：${esc(b.sentAt)}</div>${b.items.map(x=>`<div class="line"><span>${esc(x.owner)}｜${esc(x.name)} ${esc(x.spec||'')}</span><b>${x.qty}</b></div>`).join('')}</div>`).join(''):'<div class="muted">目前尚無已送出批次</div>';
   const allHtml=items.map(x=>`<div class="line"><span>${esc(x.name)} ${esc(x.spec||'')}</span><span>${x.qty} × ${money(x.price)} = <b>${money(x.amount)}</b></span></div>`).join('');
-  return `<div class="order-block"><h3>${esc(vendor)} <span class="badge">${money(amount)}</span></h3><section style="border:2px solid #111;padding:12px;margin:10px 0"><h3>待送追加品項明細 <span class="badge">共 ${pendingQty} 件</span></h3>${additionHtml}</section><details><summary style="cursor:pointer;font-weight:800;padding:10px 0">查看本月累計品項（含已送）</summary>${allHtml}</details></div>`
+  return `<div class="order-block"><h3>${esc(vendor)} <span class="badge">${money(amount)}</span></h3><section style="border:2px solid #111;padding:12px;margin:10px 0"><h3>待送追加品項明細 <span class="badge">共 ${pendingQty} 件</span></h3>${additionHtml}</section><section style="background:#f2f2f2;padding:12px;margin:10px 0"><h3>已送出批次紀錄</h3>${batchHtml}</section><details><summary style="cursor:pointer;font-weight:800;padding:10px 0">查看本月累計品項（含已送）</summary>${allHtml}</details></div>`
  }).join('')||'本月尚無資料'
 }
 async function loadAll(){const key=adminKey.value,month=monthInput.value;if(!key)return;try{const d=await jsonp({action:'summary',adminKey:key,month});if(!d.ok)throw new Error(d.message);summaryData=d;status.textContent=d.locked?'目前已截止（'+d.lockMode+'）':'目前開放中（'+d.lockMode+'）';renderSummary(d);renderDesignerBreakdown(d);renderVendorPendingBreakdown(d);await loadShopOrder()}catch(e){alert(e.message)}}
