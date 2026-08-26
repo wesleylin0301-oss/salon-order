@@ -105,4 +105,14 @@ async function deleteDesigner(encoded){const name=decodeURIComponent(encoded);if
 async function setLock(mode){if(!adminKey.value)return alert('請輸入店長密碼');try{await post('setLock',{mode});await loadAll()}catch(e){alert(e.message)}}
 async function copyVendorSummary(encoded){const vendor=decodeURIComponent(encoded),text=vendorCopyTexts[vendor],items=vendorCopyPayloads[vendor]||[];if(!text||!items.length)return alert('目前沒有尚未送出的追加品項');try{await navigator.clipboard.writeText(text);await post('markVendorSent',{designer:vendor,items});await loadAll();alert('已複製並記錄 '+vendor+' 叫貨單（不含金額）')}catch(e){alert('複製或記錄失敗：'+e.message)}}
 init();
-</script></body></html>
+</script><style>
+.card,.notice,.department,.series,.item,.selected-item,.selected-panel{border-radius:16px}
+.department,.series{overflow:hidden}.series{margin:8px}
+button,.input,input,select,textarea{border-radius:12px}
+.tabs{gap:7px}.tabs button{border-radius:12px}
+.badge{border-radius:999px;padding:3px 9px}
+.kpi{border-radius:16px}.search .card{border-radius:16px}
+.controls button{border-radius:50%}
+.totalbar{border-radius:18px 18px 0 0}
+section[style*="border:2px"],section[style*="background:#f2f2f2"]{border-radius:16px}
+</style></body></html>
