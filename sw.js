@@ -1,5 +1,5 @@
-const CACHE='wd-salon-shell-v2';
-const ASSETS=['./index.html','./admin.html','./icons/designer-192.png','./icons/designer-512.png','./icons/admin-192.png','./icons/admin-512.png','./manifest.webmanifest','./admin-manifest.webmanifest'];
+const CACHE='wd-salon-shell-v3';
+const ASSETS=['./index.html','./admin.html','./icons/wesley-dandy-designer-192-v2.png','./icons/wesley-dandy-designer-512-v2.png','./icons/wesley-dandy-admin-192-v2.png','./icons/wesley-dandy-admin-512-v2.png','./manifest.webmanifest','./admin-manifest.webmanifest'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{
