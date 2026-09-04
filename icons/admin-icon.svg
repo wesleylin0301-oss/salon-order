@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#f2f2f2"/>
+  <rect x="24" y="24" width="464" height="464" rx="92" fill="none" stroke="#090909" stroke-width="16"/>
+  <path d="M96 105h52l33 187 44-187h62l44 187 33-187h52l-57 276h-57l-46-190-46 190h-57L96 105Z" fill="#090909"/>
+  <rect x="96" y="400" width="320" height="12" rx="6" fill="#090909"/>
+  <text x="256" y="455" text-anchor="middle" font-family="Arial,sans-serif" font-size="34" font-weight="700" letter-spacing="7" fill="#090909">ADMIN</text>
+</svg>

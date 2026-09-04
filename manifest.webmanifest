@@ -1,0 +1,17 @@
+{
+  "id": "/salon-order/",
+  "name": "W.D 設計師叫貨",
+  "short_name": "設計師叫貨",
+  "description": "W.D 設計師叫貨系統",
+  "lang": "zh-TW",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#ededed",
+  "theme_color": "#090909",
+  "icons": [
+    {"src":"icons/designer-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
+    {"src":"icons/designer-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+  ]
+}
