@@ -1,4 +1,4 @@
-const CACHE='wd-salon-shell-v6';
+const CACHE='wd-salon-shell-v7';
 const ASSETS=['./index.html','./admin.html','./icons/wesley-dandy-designer-192-v2.png','./icons/wesley-dandy-designer-512-v2.png','./icons/wesley-dandy-admin-white-192-v3.png','./icons/wesley-dandy-admin-white-512-v3.png','./manifest.webmanifest','./admin-manifest.webmanifest'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
