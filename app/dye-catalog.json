@@ -1,0 +1,886 @@
+[
+  {
+    "series": "根本系列",
+    "name": "10BB"
+  },
+  {
+    "series": "根本系列",
+    "name": "10CB"
+  },
+  {
+    "series": "根本系列",
+    "name": "10GOB"
+  },
+  {
+    "series": "根本系列",
+    "name": "10MTB"
+  },
+  {
+    "series": "根本系列",
+    "name": "10NB"
+  },
+  {
+    "series": "根本系列",
+    "name": "10OLB"
+  },
+  {
+    "series": "根本系列",
+    "name": "10RB"
+  },
+  {
+    "series": "根本系列",
+    "name": "10WB"
+  },
+  {
+    "series": "根本系列",
+    "name": "3NB"
+  },
+  {
+    "series": "根本系列",
+    "name": "4NB"
+  },
+  {
+    "series": "根本系列",
+    "name": "5BB"
+  },
+  {
+    "series": "根本系列",
+    "name": "5CB"
+  },
+  {
+    "series": "根本系列",
+    "name": "5GOB"
+  },
+  {
+    "series": "根本系列",
+    "name": "5MTB"
+  },
+  {
+    "series": "根本系列",
+    "name": "5NB"
+  },
+  {
+    "series": "根本系列",
+    "name": "5OLB"
+  },
+  {
+    "series": "根本系列",
+    "name": "5RB"
+  },
+  {
+    "series": "根本系列",
+    "name": "5WB"
+  },
+  {
+    "series": "根本系列",
+    "name": "6BB"
+  },
+  {
+    "series": "根本系列",
+    "name": "6CB"
+  },
+  {
+    "series": "根本系列",
+    "name": "6GOB"
+  },
+  {
+    "series": "根本系列",
+    "name": "6MTB"
+  },
+  {
+    "series": "根本系列",
+    "name": "6NB"
+  },
+  {
+    "series": "根本系列",
+    "name": "6OLB"
+  },
+  {
+    "series": "根本系列",
+    "name": "6RB"
+  },
+  {
+    "series": "根本系列",
+    "name": "6WB"
+  },
+  {
+    "series": "根本系列",
+    "name": "7BB"
+  },
+  {
+    "series": "根本系列",
+    "name": "7CB"
+  },
+  {
+    "series": "根本系列",
+    "name": "7GOB"
+  },
+  {
+    "series": "根本系列",
+    "name": "7MTB"
+  },
+  {
+    "series": "根本系列",
+    "name": "7NB"
+  },
+  {
+    "series": "根本系列",
+    "name": "7OLB"
+  },
+  {
+    "series": "根本系列",
+    "name": "7RB"
+  },
+  {
+    "series": "根本系列",
+    "name": "7WB"
+  },
+  {
+    "series": "根本系列",
+    "name": "8BB"
+  },
+  {
+    "series": "根本系列",
+    "name": "8CB"
+  },
+  {
+    "series": "根本系列",
+    "name": "8GOB"
+  },
+  {
+    "series": "根本系列",
+    "name": "8MTB"
+  },
+  {
+    "series": "根本系列",
+    "name": "8NB"
+  },
+  {
+    "series": "根本系列",
+    "name": "8OLB"
+  },
+  {
+    "series": "根本系列",
+    "name": "8RB"
+  },
+  {
+    "series": "根本系列",
+    "name": "8WB"
+  },
+  {
+    "series": "根本系列",
+    "name": "9BB"
+  },
+  {
+    "series": "根本系列",
+    "name": "9CB"
+  },
+  {
+    "series": "根本系列",
+    "name": "9GOB"
+  },
+  {
+    "series": "根本系列",
+    "name": "9MTB"
+  },
+  {
+    "series": "根本系列",
+    "name": "9NB"
+  },
+  {
+    "series": "根本系列",
+    "name": "9OLB"
+  },
+  {
+    "series": "根本系列",
+    "name": "9RB"
+  },
+  {
+    "series": "根本系列",
+    "name": "9WB"
+  },
+  {
+    "series": "綻放系列",
+    "name": "10GA"
+  },
+  {
+    "series": "綻放系列",
+    "name": "10GB"
+  },
+  {
+    "series": "綻放系列",
+    "name": "10GN"
+  },
+  {
+    "series": "綻放系列",
+    "name": "10GNB"
+  },
+  {
+    "series": "綻放系列",
+    "name": "10GP"
+  },
+  {
+    "series": "綻放系列",
+    "name": "10GY"
+  },
+  {
+    "series": "綻放系列",
+    "name": "10MT"
+  },
+  {
+    "series": "綻放系列",
+    "name": "10NN"
+  },
+  {
+    "series": "綻放系列",
+    "name": "12GA"
+  },
+  {
+    "series": "綻放系列",
+    "name": "12GB"
+  },
+  {
+    "series": "綻放系列",
+    "name": "12GN"
+  },
+  {
+    "series": "綻放系列",
+    "name": "12GNB"
+  },
+  {
+    "series": "綻放系列",
+    "name": "12GP"
+  },
+  {
+    "series": "綻放系列",
+    "name": "12GY"
+  },
+  {
+    "series": "綻放系列",
+    "name": "12MT"
+  },
+  {
+    "series": "綻放系列",
+    "name": "2GNB"
+  },
+  {
+    "series": "綻放系列",
+    "name": "2NN"
+  },
+  {
+    "series": "綻放系列",
+    "name": "3MT"
+  },
+  {
+    "series": "綻放系列",
+    "name": "3NN"
+  },
+  {
+    "series": "綻放系列",
+    "name": "4GA"
+  },
+  {
+    "series": "綻放系列",
+    "name": "4GB"
+  },
+  {
+    "series": "綻放系列",
+    "name": "4GN"
+  },
+  {
+    "series": "綻放系列",
+    "name": "4GNB"
+  },
+  {
+    "series": "綻放系列",
+    "name": "4GP"
+  },
+  {
+    "series": "綻放系列",
+    "name": "4GY"
+  },
+  {
+    "series": "綻放系列",
+    "name": "4MT"
+  },
+  {
+    "series": "綻放系列",
+    "name": "4NN"
+  },
+  {
+    "series": "綻放系列",
+    "name": "5GA"
+  },
+  {
+    "series": "綻放系列",
+    "name": "5GB"
+  },
+  {
+    "series": "綻放系列",
+    "name": "5GN"
+  },
+  {
+    "series": "綻放系列",
+    "name": "5GNB"
+  },
+  {
+    "series": "綻放系列",
+    "name": "5GP"
+  },
+  {
+    "series": "綻放系列",
+    "name": "5GY"
+  },
+  {
+    "series": "綻放系列",
+    "name": "5MT"
+  },
+  {
+    "series": "綻放系列",
+    "name": "5NN"
+  },
+  {
+    "series": "綻放系列",
+    "name": "6GA"
+  },
+  {
+    "series": "綻放系列",
+    "name": "6GB"
+  },
+  {
+    "series": "綻放系列",
+    "name": "6GN"
+  },
+  {
+    "series": "綻放系列",
+    "name": "6GNB"
+  },
+  {
+    "series": "綻放系列",
+    "name": "6GP"
+  },
+  {
+    "series": "綻放系列",
+    "name": "6GY"
+  },
+  {
+    "series": "綻放系列",
+    "name": "6MT"
+  },
+  {
+    "series": "綻放系列",
+    "name": "6NN"
+  },
+  {
+    "series": "綻放系列",
+    "name": "7GA"
+  },
+  {
+    "series": "綻放系列",
+    "name": "7GB"
+  },
+  {
+    "series": "綻放系列",
+    "name": "7GN"
+  },
+  {
+    "series": "綻放系列",
+    "name": "7GNB"
+  },
+  {
+    "series": "綻放系列",
+    "name": "7GP"
+  },
+  {
+    "series": "綻放系列",
+    "name": "7GY"
+  },
+  {
+    "series": "綻放系列",
+    "name": "7MT"
+  },
+  {
+    "series": "綻放系列",
+    "name": "7NN"
+  },
+  {
+    "series": "綻放系列",
+    "name": "8GA"
+  },
+  {
+    "series": "綻放系列",
+    "name": "8GB"
+  },
+  {
+    "series": "綻放系列",
+    "name": "8GN"
+  },
+  {
+    "series": "綻放系列",
+    "name": "8GNB"
+  },
+  {
+    "series": "綻放系列",
+    "name": "8GP"
+  },
+  {
+    "series": "綻放系列",
+    "name": "8GY"
+  },
+  {
+    "series": "綻放系列",
+    "name": "8MT"
+  },
+  {
+    "series": "綻放系列",
+    "name": "8NN"
+  },
+  {
+    "series": "綻放系列",
+    "name": "B10"
+  },
+  {
+    "series": "綻放系列",
+    "name": "B6"
+  },
+  {
+    "series": "綻放系列",
+    "name": "B8"
+  },
+  {
+    "series": "綻放系列",
+    "name": "BV10"
+  },
+  {
+    "series": "綻放系列",
+    "name": "BV6"
+  },
+  {
+    "series": "綻放系列",
+    "name": "BV8"
+  },
+  {
+    "series": "綻放系列",
+    "name": "C10"
+  },
+  {
+    "series": "綻放系列",
+    "name": "C8"
+  },
+  {
+    "series": "綻放系列",
+    "name": "G6"
+  },
+  {
+    "series": "綻放系列",
+    "name": "MB10"
+  },
+  {
+    "series": "綻放系列",
+    "name": "MB6"
+  },
+  {
+    "series": "綻放系列",
+    "name": "O10"
+  },
+  {
+    "series": "綻放系列",
+    "name": "O7"
+  },
+  {
+    "series": "綻放系列",
+    "name": "P10"
+  },
+  {
+    "series": "綻放系列",
+    "name": "P8"
+  },
+  {
+    "series": "綻放系列",
+    "name": "R7"
+  },
+  {
+    "series": "綻放系列",
+    "name": "RV10"
+  },
+  {
+    "series": "綻放系列",
+    "name": "RV6"
+  },
+  {
+    "series": "綻放系列",
+    "name": "RV8"
+  },
+  {
+    "series": "綻放系列",
+    "name": "V10"
+  },
+  {
+    "series": "綻放系列",
+    "name": "V6"
+  },
+  {
+    "series": "綻放系列",
+    "name": "V8"
+  },
+  {
+    "series": "綻放系列",
+    "name": "Y10"
+  },
+  {
+    "series": "綻放系列",
+    "name": "YM10"
+  },
+  {
+    "series": "綻放系列",
+    "name": "YM6"
+  },
+  {
+    "series": "綻放系列",
+    "name": "YM8"
+  },
+  {
+    "series": "綻放系列",
+    "name": "ライトナー"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "增量劑14"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "奶霜灰11"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "奶霜灰13"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "奶霜灰5"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "奶霜灰7"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "奶霜灰9"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "宇宙紫5"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "宇宙紫6"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "星際灰7"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "曜石黑1"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "松石綠6"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "極光灰14"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "極光銀11"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "極光銀13"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "極光銀5"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "極光銀7"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "極光銀9"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "水透藍7"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "海軍藍3"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "海軍藍5"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "清水灰11"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "清水灰13"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "清水灰5"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "清水灰7"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "清水灰9"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "潤色劑"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "牛奶白10"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "珊瑚粉10"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "珊瑚粉6"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "珊瑚紫3"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "珊瑚紫5"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "珍珠粉6"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "琥珀橘10"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "石榴紅7"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "粉蜜紫14"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "羅馬紅7"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "胭脂粉11"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "胭脂粉13"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "胭脂粉5"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "胭脂粉7"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "胭脂粉9"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "蜜桃粉6"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "螢光黃11"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "鐵木棕3"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "黎米黃11"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "黎米黃14"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "黎米黃5"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "黎米黃7"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "黎米黃8"
+  },
+  {
+    "series": "露西亞系列",
+    "name": "黎米黃9"
+  },
+  {
+    "series": "喚采/喚癮 13系列",
+    "name": "13-COB"
+  },
+  {
+    "series": "喚采/喚癮 13系列",
+    "name": "13-EM"
+  },
+  {
+    "series": "喚采/喚癮 13系列",
+    "name": "13-FAP"
+  },
+  {
+    "series": "喚采/喚癮 13系列",
+    "name": "13-GLAP"
+  },
+  {
+    "series": "喚采/喚癮 13系列",
+    "name": "13-GLCA"
+  },
+  {
+    "series": "喚采/喚癮 13系列",
+    "name": "13-GLVI"
+  },
+  {
+    "series": "喚采/喚癮 13系列",
+    "name": "13-MNV"
+  },
+  {
+    "series": "喚采/喚癮 13系列",
+    "name": "13-Nakedcoral"
+  },
+  {
+    "series": "喚采/喚癮 13系列",
+    "name": "13-Nakedsand"
+  },
+  {
+    "series": "喚采/喚癮 13系列",
+    "name": "13-Nakedwarm"
+  },
+  {
+    "series": "喚采/喚癮 13系列",
+    "name": "13-SI"
+  },
+  {
+    "series": "喚采/喚癮 7系列",
+    "name": "7-COB"
+  },
+  {
+    "series": "喚采/喚癮 7系列",
+    "name": "7-EM"
+  },
+  {
+    "series": "喚采/喚癮 7系列",
+    "name": "7-FAP"
+  },
+  {
+    "series": "喚采/喚癮 7系列",
+    "name": "7-GLAP"
+  },
+  {
+    "series": "喚采/喚癮 7系列",
+    "name": "7-GLCA"
+  },
+  {
+    "series": "喚采/喚癮 7系列",
+    "name": "7-GLVI"
+  },
+  {
+    "series": "喚采/喚癮 7系列",
+    "name": "7-MNV"
+  },
+  {
+    "series": "喚采/喚癮 7系列",
+    "name": "7-Nakedcoral"
+  },
+  {
+    "series": "喚采/喚癮 7系列",
+    "name": "7-Nakedsand"
+  },
+  {
+    "series": "喚采/喚癮 7系列",
+    "name": "7-Nakedwarm"
+  },
+  {
+    "series": "喚采/喚癮 7系列",
+    "name": "7-SI"
+  },
+  {
+    "series": "喚采/喚癮 Deep/Pale",
+    "name": "Deep Blue"
+  },
+  {
+    "series": "喚采/喚癮 Deep/Pale",
+    "name": "Deep Purple"
+  },
+  {
+    "series": "喚采/喚癮 Deep/Pale",
+    "name": "Deep Silver"
+  },
+  {
+    "series": "喚采/喚癮 Deep/Pale",
+    "name": "Pale Beige"
+  },
+  {
+    "series": "喚采/喚癮 Deep/Pale",
+    "name": "Pale Blue"
+  },
+  {
+    "series": "喚采/喚癮 Deep/Pale",
+    "name": "Pale Orange"
+  },
+  {
+    "series": "喚采/喚癮 Deep/Pale",
+    "name": "Pale Pink"
+  },
+  {
+    "series": "喚采/喚癮 Deep/Pale",
+    "name": "Pale Silver"
+  },
+  {
+    "series": "喚采/喚癮 Deep/Pale",
+    "name": "Pale Violet"
+  },
+  {
+    "series": "喚采/喚癮 Deep/Pale",
+    "name": "Pale Yellow"
+  },
+  {
+    "series": "重組染膏",
+    "name": "萊肯重組染膏"
+  },
+  {
+    "series": "露西亞漂粉",
+    "name": "露西亞漂粉（極速型）"
+  },
+  {
+    "series": "露西亞漂粉",
+    "name": "露西亞漂粉"
+  }
+]

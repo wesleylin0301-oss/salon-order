@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1788008020819,
+      "tag": "0000_pretty_switch",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1788077981209,
+      "tag": "0001_amused_bloodaxe",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1789024551043,
+      "tag": "0002_sweet_carmella_unuscione",
+      "breakpoints": true
+    }
+  ]
+}

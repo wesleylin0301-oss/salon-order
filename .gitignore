@@ -1,0 +1,8 @@
+node_modules/
+.next/
+.vinext/
+.wrangler/
+dist/
+.pnpm-store/
+.tmp-spreadsheet/
+*.tmp

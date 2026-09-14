@@ -1,0 +1,177 @@
+[
+  {
+    "category": "燙髮藥水",
+    "vendor": "哥德式",
+    "series": "水光系列",
+    "name": "水光系列一劑 M1 藍",
+    "spec": "400ml"
+  },
+  {
+    "category": "燙髮藥水",
+    "vendor": "哥德式",
+    "series": "AQ 水鑽光溫塑",
+    "name": "AQ 水鑽光溫塑 H1",
+    "spec": "400g"
+  },
+  {
+    "category": "燙髮藥水",
+    "vendor": "哥德式",
+    "series": "AQ 水鑽光溫塑",
+    "name": "AQ 水鑽光溫塑 N1",
+    "spec": "400g"
+  },
+  {
+    "category": "燙髮藥水",
+    "vendor": "哥德式",
+    "series": "AQ 水鑽光溫塑",
+    "name": "AQ 水鑽光溫塑 SH1",
+    "spec": "400g"
+  },
+  {
+    "category": "燙髮藥水",
+    "vendor": "哥德式",
+    "series": "Neo 溫塑 2劑",
+    "name": "Neo 溫塑 2劑 液狀",
+    "spec": "800g"
+  },
+  {
+    "category": "燙髮藥水",
+    "vendor": "哥德式",
+    "series": "Neo 溫塑 2劑",
+    "name": "Neo 溫塑 2劑 霧狀",
+    "spec": "800g"
+  },
+  {
+    "category": "藥水",
+    "vendor": "Fiole",
+    "series": "F.植萃燙髮（溫塑直髮）",
+    "name": "100 EX 一劑 EXTRA HARD",
+    "spec": "400g"
+  },
+  {
+    "category": "藥水",
+    "vendor": "Fiole",
+    "series": "F.植萃燙髮（溫塑直髮）",
+    "name": "80 H 一劑 HARD",
+    "spec": "400g"
+  },
+  {
+    "category": "藥水",
+    "vendor": "Fiole",
+    "series": "F.植萃燙髮（溫塑直髮）",
+    "name": "50 N 一劑 NORMAL",
+    "spec": "400g"
+  },
+  {
+    "category": "藥水",
+    "vendor": "Fiole",
+    "series": "F.植萃燙髮（溫塑直髮）",
+    "name": "15 LD 一劑（酸性）",
+    "spec": "400g"
+  },
+  {
+    "category": "藥水",
+    "vendor": "Fiole",
+    "series": "F.植萃燙髮（溫塑直髮）",
+    "name": "LOTION 二劑（液狀）",
+    "spec": "400mL"
+  },
+  {
+    "category": "藥水",
+    "vendor": "Fiole",
+    "series": "F.植萃燙髮（溫塑直髮）",
+    "name": "LD 二劑（乳液狀）",
+    "spec": "400mL"
+  },
+  {
+    "category": "藥水",
+    "vendor": "Fiole",
+    "series": "F.植萃燙髮（溫塑直髮）",
+    "name": "CREAM 二劑（霜狀）",
+    "spec": "400g"
+  },
+  {
+    "category": "藥水",
+    "vendor": "Fiole",
+    "series": "F.植萃燙髮（溫塑直髮）",
+    "name": "LOTION OX2 二劑（液狀）",
+    "spec": "2000mL"
+  },
+  {
+    "category": "藥水",
+    "vendor": "Fiole",
+    "series": "F.植萃燙髮（溫塑直髮）",
+    "name": "ST 軟化加強劑",
+    "spec": "200mL"
+  },
+  {
+    "category": "藥水",
+    "vendor": "Fiole",
+    "series": "F.WAVE 翡翠冷燙",
+    "name": "翡翠冷燙 H1 一劑",
+    "spec": "400mL"
+  },
+  {
+    "category": "藥水",
+    "vendor": "Fiole",
+    "series": "F.WAVE 翡翠冷燙",
+    "name": "翡翠冷燙 N1 一劑",
+    "spec": "400mL"
+  },
+  {
+    "category": "藥水",
+    "vendor": "Fiole",
+    "series": "F.WAVE 翡翠冷燙",
+    "name": "翡翠冷燙 10% 二劑（溴酸鈉）",
+    "spec": "960mL"
+  },
+  {
+    "category": "藥水",
+    "vendor": "Fiole",
+    "series": "F.綻放柔妝燙",
+    "name": "Ha1 一劑（液狀）",
+    "spec": "400mL"
+  },
+  {
+    "category": "藥水",
+    "vendor": "Fiole",
+    "series": "F.綻放柔妝燙",
+    "name": "Sa1 一劑（液狀）",
+    "spec": "400mL"
+  },
+  {
+    "category": "藥水",
+    "vendor": "Fiole",
+    "series": "F.綻放柔妝燙",
+    "name": "Ec1 一劑（膏狀）",
+    "spec": "400g"
+  },
+  {
+    "category": "藥水",
+    "vendor": "Fiole",
+    "series": "F.綻放柔妝燙",
+    "name": "Hc1 一劑（膏狀）",
+    "spec": "400g"
+  },
+  {
+    "category": "藥水",
+    "vendor": "Fiole",
+    "series": "F.綻放柔妝燙",
+    "name": "Sc1 一劑（膏狀）",
+    "spec": "400g"
+  },
+  {
+    "category": "藥水",
+    "vendor": "Fiole",
+    "series": "F.綻放柔妝燙",
+    "name": "Ac1 一劑（膏狀）",
+    "spec": "400g"
+  },
+  {
+    "category": "藥水",
+    "vendor": "Fiole",
+    "series": "F.綻放柔妝燙",
+    "name": "燙前衛士",
+    "spec": "130g"
+  }
+]
